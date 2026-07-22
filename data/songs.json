@@ -1,0 +1,138 @@
+[
+    {
+        "id": "wedding_a",
+        "title": "暗灯，灯光秀",
+        "artist": "澤野弘之",
+        "originalTitle": "κrOnё",
+        "scene": "灯光秀",
+        "cue": "A",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/a_暗灯，灯光秀（澤野弘之 - κrOnё）.mp3"
+    },
+    {
+        "id": "wedding_b",
+        "title": "主持人开场",
+        "artist": "CHPTRS",
+        "originalTitle": "Through Different Eyes",
+        "scene": "主持人开场",
+        "cue": "B",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/b_主持人开场(CHPTRS - Through Different Eyes ).mp3"
+    },
+    {
+        "id": "wedding_c",
+        "title": "新郎入场",
+        "artist": "CHPTRS",
+        "originalTitle": "Through Different Eyes (副歌)",
+        "scene": "新郎入场",
+        "cue": "C",
+        "note": "与上一首相同取副歌",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/c_新郎入场与上一首相同取副歌.mp3"
+    },
+    {
+        "id": "wedding_d",
+        "title": "新郎上场后分享讲话",
+        "artist": "Lana Del Rey",
+        "originalTitle": "Young and Beautiful (Inst.)",
+        "scene": "新郎讲话",
+        "cue": "D",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/d_新郎上场后分享讲话（Young and Beautiful (Inst_)）.mp3"
+    },
+    {
+        "id": "wedding_e",
+        "title": "新娘入场+交接",
+        "artist": "Lana Del Rey",
+        "originalTitle": "Young and Beautiful",
+        "scene": "新娘入场",
+        "cue": "E",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/e_新娘入场+交接（Young and Beautiful ）.mp3"
+    },
+    {
+        "id": "wedding_f",
+        "title": "共同入场",
+        "artist": "Richard Wagner",
+        "originalTitle": "Bridal Chorus",
+        "scene": "共同入场",
+        "cue": "F",
+        "note": "提前10秒开始",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/f_共同入场提前10秒开始（Bridal Chorus）.mp3"
+    },
+    {
+        "id": "wedding_g",
+        "title": "誓言",
+        "artist": "Loren Allred",
+        "originalTitle": "Never Enough + Rewrite the Stars (钢琴)",
+        "scene": "誓言",
+        "cue": "G",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/g_誓言（never enough+rewrite the stars钢琴）.mp3"
+    },
+    {
+        "id": "wedding_h",
+        "title": "送戒指，交换拥吻",
+        "artist": "Loren Allred",
+        "originalTitle": "Never Enough",
+        "scene": "交换戒指/拥吻",
+        "cue": "H",
+        "note": "卡点1分48秒",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/h_ 送戒指，交换拥吻卡点1分48秒(Loren Allred - Never Enough).mp3"
+    },
+    {
+        "id": "wedding_i",
+        "title": "父母入场",
+        "artist": "植松伸夫",
+        "originalTitle": "FINAL FANTASY",
+        "scene": "父母入场",
+        "cue": "I",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/i_父母入场FINAL FANTASY.mp3"
+    },
+    {
+        "id": "wedding_j1",
+        "title": "举杯（卡点34秒）",
+        "artist": "The Greatest Showman",
+        "originalTitle": "Come Alive",
+        "scene": "举杯",
+        "cue": "J-1",
+        "note": "卡点34秒",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/j_举杯卡点34秒come alive.mp3"
+    },
+    {
+        "id": "wedding_j2",
+        "title": "举杯（伴奏版）",
+        "artist": "Coldplay",
+        "originalTitle": "Viva La Vida (伴奏版)",
+        "scene": "举杯",
+        "cue": "J-2",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/j_举杯（Viva La Vida  - 伴奏版）.mp3"
+    },
+    {
+        "id": "wedding_k",
+        "title": "退场",
+        "artist": "The Greatest Showman",
+        "originalTitle": "The Greatest Show",
+        "scene": "退场",
+        "cue": "K",
+        "duration": 0,
+        "durationStr": "--:--",
+        "audioUrl": "data/audio/k_退场(The Greatest Show).mp3"
+    }
+]

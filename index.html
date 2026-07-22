@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💒 婚礼音乐库 - 歌单制作</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="logo">💒 婚礼音乐库</h1>
+            <span class="subtitle">BGM 管理 & 歌单制作</span>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-primary" id="btnUpload" title="上传 MP3 文件">
+                📥 上传 MP3
+            </button>
+            <button class="btn btn-outline" id="btnExportZip" title="导出歌单为 ZIP 压缩包">
+                📦 导出 ZIP
+            </button>
+        </div>
+        <!-- 隐藏的文件上传 input -->
+        <input type="file" id="fileUploadMp3" accept=".mp3" multiple style="display:none">
+    </header>
+
+    <!-- 主体布局 -->
+    <div class="main-container">
+        <!-- 左侧：音乐库 -->
+        <aside class="panel panel-library" id="panelLibrary">
+            <div class="panel-header">
+                <h2>📚 音乐库</h2>
+                <span class="song-count" id="libraryCount">0 首</span>
+            </div>
+
+            <!-- 搜索与筛选 -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 搜索歌曲、歌手、专辑...">
+            </div>
+            <div class="filter-row">
+                <select id="filterGenre">
+                    <option value="">全部风格</option>
+                </select>
+                <select id="filterScene">
+                    <option value="">全部环节</option>
+                </select>
+                <select id="filterArtist">
+                    <option value="">全部歌手</option>
+                </select>
+            </div>
+
+            <!-- 歌曲列表 -->
+            <div class="song-list" id="libraryList">
+                <div class="empty-state">
+                    <div class="empty-icon">🎶</div>
+                    <p>还没有歌曲</p>
+                    <p class="empty-hint">点击「上传 MP3」或拖拽 MP3 文件到这里</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间分隔 -->
+        <div class="divider"></div>
+
+        <!-- 右侧：歌单制作区 -->
+        <main class="panel panel-playlist" id="panelPlaylist">
+            <div class="panel-header">
+                <h2>�️ 我的工作区</h2>
+                <div class="playlist-actions">
+                    <span class="song-count" id="playlistCount">0 首</span>
+                    <span class="song-count" id="playlistTotalDuration" title="总时长">0:00</span>
+                    <button class="btn btn-small btn-danger" id="btnClearPlaylist" title="清空歌单">
+                        🗑️ 清空
+                    </button>
+                </div>
+            </div>
+
+            <!-- 歌单名称 -->
+            <div class="playlist-name-row">
+                <input type="text" id="playlistName" placeholder="输入歌单名称..." value="婚礼歌单">
+            </div>
+
+            <!-- 歌单歌曲列表 -->
+            <div class="song-list playlist-list" id="playlistList">
+                <div class="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <p>歌单还是空的</p>
+                    <p class="empty-hint">从左侧音乐库点击 <strong>+</strong> 添加歌曲</p>
+                </div>
+            </div>
+
+            <!-- 歌单操作 -->
+            <div class="playlist-footer">
+                <button class="btn btn-primary" id="btnSavePlaylist">💾 保存歌单</button>
+                <button class="btn btn-outline" id="btnLoadPlaylist">📂 加载歌单</button>
+                <button class="btn btn-outline" id="btnExportPlaylist" title="导出歌单信息 JSON">📤 导出信息</button>
+                <select id="savedPlaylists" class="saved-select">
+                    <option value="">-- 已保存的歌单 --</option>
+                </select>
+                <button class="btn btn-small btn-danger" id="btnDeleteSaved" title="删除选中的歌单">🗑️</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- 音乐播放器（底部迷你栏） -->
+    <div class="mini-player" id="miniPlayer" style="display:none;">
+        <div class="player-info">
+            <div class="player-cover" id="playerCover">🎵</div>
+            <div class="player-meta">
+                <span class="player-title" id="playerTitle">-</span>
+                <span class="player-artist" id="playerArtist">-</span>
+            </div>
+        </div>
+        <div class="player-controls">
+            <button class="btn-icon" id="btnPrev" title="上一首">⏮️</button>
+            <button class="btn-icon btn-play" id="btnPlay" title="播放/暂停">▶️</button>
+            <button class="btn-icon" id="btnNext" title="下一首">⏭️</button>
+        </div>
+        <div class="player-progress">
+            <input type="range" id="progressBar" min="0" max="100" value="0">
+            <span class="player-time" id="playerTime">0:00 / 0:00</span>
+        </div>
+        <div class="player-volume">
+            <span>🔊</span>
+            <input type="range" id="volumeBar" min="0" max="100" value="70">
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 音频剪辑器模态框 -->
+    <div class="modal-overlay" id="editorOverlay" style="display:none;">
+        <div class="modal editor-modal" id="audioEditorModal" style="display:none;">
+            <button class="modal-close" id="editorClose">✕</button>
+            <div class="editor-header">
+                <h2>✂️ 音频剪辑器</h2>
+                <span class="editor-subtitle" id="editorOriginalName">-</span>
+            </div>
+            <div class="editor-body">
+                <div class="editor-row">
+                    <label>剪辑名称：</label>
+                    <input type="text" id="editorNewName" placeholder="输入剪辑后的名称...">
+                </div>
+                <div class="editor-row">
+                    <label>原始时长：</label>
+                    <span id="editorDuration">--:--</span>
+                </div>
+
+                <!-- 波形图画布 -->
+                <div class="waveform-container">
+                    <canvas id="editorCanvas"></canvas>
+                </div>
+
+                <!-- 时间控制 -->
+                <div class="editor-time-controls">
+                    <div class="time-input-group">
+                        <label>开始时间</label>
+                        <input type="text" id="editorTrimStart" value="0:00">
+                    </div>
+                    <div class="time-input-group">
+                        <label>结束时间</label>
+                        <input type="text" id="editorTrimEnd" value="0:00">
+                    </div>
+                    <div class="time-input-group">
+                        <label>剪辑时长</label>
+                        <span id="editorClipDuration">0:00</span>
+                    </div>
+                    <button class="btn btn-small btn-outline" id="btnEditorApplyTime">应用</button>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="editor-actions">
+                    <button class="btn btn-outline" id="btnEditorPlay">▶ 预览剪辑</button>
+                    <button class="btn btn-primary" id="btnEditorSave">💾 保存到音乐库</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- 预设音乐库数据（内嵌，无需服务器） -->
+    <script id="preset-songs" type="application/json">[{"id":"wedding_a","title":"暗灯，灯光秀","artist":"澤野弘之","originalTitle":"κrOnё","scene":"灯光秀","cue":"A","duration":0,"durationStr":"--:--","audioUrl":"data/audio/a_暗灯，灯光秀（澤野弘之 - κrOnё）.mp3"},{"id":"wedding_b","title":"主持人开场","artist":"CHPTRS","originalTitle":"Through Different Eyes","scene":"主持人开场","cue":"B","duration":0,"durationStr":"--:--","audioUrl":"data/audio/b_主持人开场(CHPTRS - Through Different Eyes ).mp3"},{"id":"wedding_c","title":"新郎入场","artist":"CHPTRS","originalTitle":"Through Different Eyes (副歌)","scene":"新郎入场","cue":"C","note":"与上一首相同取副歌","duration":0,"durationStr":"--:--","audioUrl":"data/audio/c_新郎入场与上一首相同取副歌.mp3"},{"id":"wedding_d","title":"新郎上场后分享讲话","artist":"Lana Del Rey","originalTitle":"Young and Beautiful (Inst.)","scene":"新郎讲话","cue":"D","duration":0,"durationStr":"--:--","audioUrl":"data/audio/d_新郎上场后分享讲话（Young and Beautiful (Inst_)）.mp3"},{"id":"wedding_e","title":"新娘入场+交接","artist":"Lana Del Rey","originalTitle":"Young and Beautiful","scene":"新娘入场","cue":"E","duration":0,"durationStr":"--:--","audioUrl":"data/audio/e_新娘入场+交接（Young and Beautiful ）.mp3"},{"id":"wedding_f","title":"共同入场","artist":"Richard Wagner","originalTitle":"Bridal Chorus","scene":"共同入场","cue":"F","note":"提前10秒开始","duration":0,"durationStr":"--:--","audioUrl":"data/audio/f_共同入场提前10秒开始（Bridal Chorus）.mp3"},{"id":"wedding_g","title":"誓言","artist":"Loren Allred","originalTitle":"Never Enough + Rewrite the Stars (钢琴)","scene":"誓言","cue":"G","duration":0,"durationStr":"--:--","audioUrl":"data/audio/g_誓言（never enough+rewrite the stars钢琴）.mp3"},{"id":"wedding_h","title":"送戒指，交换拥吻","artist":"Loren Allred","originalTitle":"Never Enough","scene":"交换戒指/拥吻","cue":"H","note":"卡点1分48秒","duration":0,"durationStr":"--:--","audioUrl":"data/audio/h_ 送戒指，交换拥吻卡点1分48秒(Loren Allred - Never Enough).mp3"},{"id":"wedding_i","title":"父母入场","artist":"植松伸夫","originalTitle":"FINAL FANTASY","scene":"父母入场","cue":"I","duration":0,"durationStr":"--:--","audioUrl":"data/audio/i_父母入场FINAL FANTASY.mp3"},{"id":"wedding_j1","title":"举杯（卡点34秒）","artist":"The Greatest Showman","originalTitle":"Come Alive","scene":"举杯","cue":"J-1","note":"卡点34秒","duration":0,"durationStr":"--:--","audioUrl":"data/audio/j_举杯卡点34秒come alive.mp3"},{"id":"wedding_j2","title":"举杯（伴奏版）","artist":"Coldplay","originalTitle":"Viva La Vida (伴奏版)","scene":"举杯","cue":"J-2","duration":0,"durationStr":"--:--","audioUrl":"data/audio/j_举杯（Viva La Vida  - 伴奏版）.mp3"},{"id":"wedding_k","title":"退场","artist":"The Greatest Showman","originalTitle":"The Greatest Show","scene":"退场","cue":"K","duration":0,"durationStr":"--:--","audioUrl":"data/audio/k_退场(The Greatest Show).mp3"}]</script>
+</body>
+</html>
