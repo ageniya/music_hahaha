@@ -508,15 +508,15 @@ const Workspace = {
         return FileStorage.getBuffer(wsItem.sourceId);
     },
 
-    /** 是否有音频（内存中有 或 曲库中已知时长） */
+    /** 是否有音频（内存中有，或曲库中有 audioUrl） */
     hasAudio(wsItem) {
         if (wsItem.isTrimmed && wsItem.trimFileId) {
             return FileStorage.has(wsItem.trimFileId);
         }
         if (FileStorage.has(wsItem.sourceId)) return true;
-        // 曲库中时长 > 0 说明音频曾加载过（FileStorage 在页面刷新后清空但元数据保留）
+        // 服务器上有音频文件可拉取
         const src = MusicData.getSongById(wsItem.sourceId);
-        return !!(src && src.duration > 0);
+        return !!(src && src.audioUrl);
     },
 
     getAll() { return [...this._items]; },

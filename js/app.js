@@ -518,10 +518,10 @@ const App = {
 
         const wsSourceIds = new Set(Workspace.getAll().map(i => i.sourceId));
         container.innerHTML = songs.map(song => {
-            const hasAudio = FileStorage.has(song.id);
+            const hasAudio = FileStorage.has(song.id) || !!song.audioUrl;
             const sceneTag = song.scene ? `<span class="badge badge-scene">${this._esc(song.scene)}</span>` : '';
             const cueTag = song.cue ? `<span class="badge badge-cue">${this._esc(song.cue)}</span>` : '';
-            const audioDot = hasAudio ? '<span class="audio-dot" title="音频已加载">🟢</span>' : '<span class="audio-dot dim" title="未加载音频">⚪</span>';
+            const audioDot = hasAudio ? '<span class="audio-dot" title="可播放">🟢</span>' : '<span class="audio-dot dim" title="无音频">⚪</span>';
 
             return `
                 <div class="song-card" data-id="${song.id}">
@@ -638,24 +638,37 @@ const App = {
     _openEditorForWs(wsId) {
         const item = Workspace.getById(wsId);
         if (!item) return;
+
+        // 检查音频是否在内存中
         const buf = Workspace.getAudioBuffer(item);
-        if (!buf) {
-            // 音频不在内存中 → 提示重新上传
-            this._toast('音频文件不在内存中，请重新上传 MP3 到曲库', 'error');
-            // 自动触发上传按钮
-            document.getElementById('btnUpload').click();
+        if (buf) { this._launchEditor(item, buf); return; }
+
+        // 不在内存 → 从服务器拉取
+        const srcSong = MusicData.getSongById(item.sourceId);
+        if (!srcSong || !srcSong.audioUrl) {
+            this._toast('该歌曲没有音频文件', 'error');
             return;
         }
-        this._editingWsItem = item;
+        this._toast('正在加载音频...', '');
+        fetch(srcSong.audioUrl).then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.arrayBuffer();
+        }).then(buf => {
+            FileStorage.set(srcSong.id, buf, srcSong.audioUrl.split('/').pop(), 'audio/mpeg');
+            App._launchEditor(item, buf);
+        }).catch(() => {
+            App._toast('音频加载失败，请检查网络', 'error');
+        });
+    },
 
-        // 构造一个伪 song 对象给 AudioEditor
+    _launchEditor(item, buf) {
+        this._editingWsItem = item;
         const pseudoSong = {
             id: item.isTrimmed ? (item.trimFileId || item.sourceId) : item.sourceId,
             title: item.title,
             artist: item.artist,
             _isTrimmed: item.isTrimmed,
         };
-        // 临时覆盖 getBuffer
         const origGetBuffer = FileStorage.getBuffer;
         FileStorage.getBuffer = (id) => {
             if (id === pseudoSong.id) return buf;
@@ -792,18 +805,37 @@ const App = {
 
     // ==================== 播放器 ====================
 
+    /** 确保音频在内存中（按需从服务器加载） */
+    _ensureAudio(song, callback) {
+        const sid = song.id;
+        if (FileStorage.has(sid)) { callback(); return; }
+        if (!song.audioUrl) { this._toast('该歌曲没有音频文件', 'error'); return; }
+        this._toast('正在加载音频...', '');
+        fetch(song.audioUrl).then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.arrayBuffer();
+        }).then(buf => {
+            FileStorage.set(sid, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
+            callback();
+        }).catch(() => {
+            this._toast('音频加载失败，请检查网络', 'error');
+        });
+    },
+
     _playLibrarySong(songId) {
         const song = MusicData.getSongById(songId);
-        if (!song || !FileStorage.has(songId)) { this._toast('音频未加载', 'error'); return; }
-        const allSongs = MusicData.search({
-            query: document.getElementById('searchInput').value,
-            genre: document.getElementById('filterGenre').value,
-            artist: document.getElementById('filterArtist').value,
-            scene: document.getElementById('filterScene').value,
-        }).filter(s => FileStorage.has(s.id));
-        this.player.playlist = allSongs;
-        this.player.currentIndex = allSongs.findIndex(s => s.id === songId);
-        this._loadAndPlay(song);
+        if (!song) return;
+        this._ensureAudio(song, () => {
+            const allSongs = MusicData.search({
+                query: document.getElementById('searchInput').value,
+                genre: document.getElementById('filterGenre').value,
+                artist: document.getElementById('filterArtist').value,
+                scene: document.getElementById('filterScene').value,
+            }).filter(s => FileStorage.has(s.id) || s.audioUrl);
+            this.player.playlist = allSongs;
+            this.player.currentIndex = allSongs.findIndex(s => s.id === songId);
+            this._loadAndPlay(song);
+        });
     },
 
     _playWorkspaceSong(wsId) {
