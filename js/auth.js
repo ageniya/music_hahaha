@@ -80,11 +80,13 @@ const LoginUI = {
     },
 
     show() {
-        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('appMain').style.display = 'none';
     },
 
     hide() {
-        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appMain').style.display = 'block';
     },
 
     _bindEvents() {

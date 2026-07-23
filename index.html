@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- 登录/注册遮罩 -->
-    <div class="login-overlay" id="loginOverlay">
+    <!-- 登录/注册页（独立整页） -->
+    <div class="login-page" id="loginPage">
         <!-- 登录面板 -->
         <div class="login-card" id="loginPanel">
             <div class="login-icon">💒</div>
@@ -45,6 +45,8 @@
         </div>
     </div>
 
+    <!-- 主应用（登录后显示） -->
+    <div id="appMain" style="display:none;">
     <!-- 顶部导航 -->
     <header class="header">
         <div class="header-left">
@@ -224,6 +226,7 @@
             </div>
         </div>
     </div>
+    </div><!-- /appMain -->
 
     <script src="js/auth.js"></script>
     <script src="js/data.js"></script>

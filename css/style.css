@@ -968,10 +968,10 @@ body {
    登录 / 注册界面
    ============================================ */
 
-.login-overlay {
+.login-page {
     position: fixed;
     inset: 0;
-    z-index: 10000;
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
