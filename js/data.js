@@ -170,6 +170,7 @@ const MusicData = {
                 const data = JSON.parse(el.textContent.trim());
                 this._songs = data.map((s, i) => this._normalizeSong(s, i));
                 console.log(`从内嵌数据加载了 ${this._songs.length} 首歌曲`);
+                this._preloadAudioFiles();
                 return true;
             }
         } catch (e) { console.warn('内嵌数据解析失败:', e.message); }
@@ -190,20 +191,38 @@ const MusicData = {
     },
 
     async _preloadAudioFiles() {
-        // file:// 协议下 fetch 不可用，跳过预加载
-        if (window.location.protocol === 'file:') return;
-
         for (const song of this._songs) {
             if (!song.audioUrl || FileStorage.has(song.id)) continue;
-            try {
-                const resp = await fetch(song.audioUrl);
-                if (resp.ok) {
-                    const buf = await resp.arrayBuffer();
-                    FileStorage.set(song.id, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
-                    await this._detectDuration(song.id);
-                }
-            } catch (e) { /* skip */ }
+            const buf = await this._fetchAudio(song.audioUrl);
+            if (buf) {
+                FileStorage.set(song.id, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
+                await this._detectDuration(song.id);
+            }
         }
+    },
+
+    /** 通用的音频加载：优先 fetch，失败回退 XHR（兼容 file:// 协议） */
+    async _fetchAudio(url) {
+        // 尝试 fetch
+        try {
+            const resp = await fetch(url);
+            if (resp.ok) return await resp.arrayBuffer();
+        } catch (e) { /* fetch 不可用时尝试 XHR */ }
+
+        // 回退：XMLHttpRequest（部分浏览器允许 file:// 下使用 XHR）
+        try {
+            return await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.responseType = 'arraybuffer';
+                xhr.onload = () => {
+                    if (xhr.status === 200 || xhr.status === 0) resolve(xhr.response);
+                    else resolve(null);
+                };
+                xhr.onerror = () => resolve(null);
+                xhr.send();
+            });
+        } catch (e) { return null; }
     },
 
     async _detectDuration(songId) {

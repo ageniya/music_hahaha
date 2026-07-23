@@ -66,7 +66,7 @@
         <!-- 右侧：歌单制作区 -->
         <main class="panel panel-playlist" id="panelPlaylist">
             <div class="panel-header">
-                <h2>�️ 我的工作区</h2>
+                <h2>🛠️ 我的工作区</h2>
                 <div class="playlist-actions">
                     <span class="song-count" id="playlistCount">0 首</span>
                     <span class="song-count" id="playlistTotalDuration" title="总时长">0:00</span>
@@ -79,6 +79,12 @@
             <!-- 歌单名称 -->
             <div class="playlist-name-row">
                 <input type="text" id="playlistName" placeholder="输入歌单名称..." value="婚礼歌单">
+            </div>
+
+            <!-- 音频未加载提示条（file:// 协议等场景） -->
+            <div class="audio-banner" id="audioBanner" style="display:none;">
+                <span>⚠️ 有 <strong id="audioBannerCount">0</strong> 首歌曲音频未加载</span>
+                <button class="btn btn-small btn-primary" id="btnLoadAudio">📥 一键加载音频</button>
             </div>
 
             <!-- 歌单歌曲列表 -->
