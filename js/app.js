@@ -402,6 +402,15 @@ const App = {
     // ==================== 初始化 ====================
 
     async init() {
+        // 登录检查
+        if (!Auth.isLoggedIn()) {
+            LoginUI.init();
+            return;
+        }
+
+        // 显示当前用户名
+        document.getElementById('headerUsername').textContent = Auth.currentUser();
+
         // 从 IndexedDB 恢复音频文件
         const restored = await FileStorage.restoreFromDB();
         if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);

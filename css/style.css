@@ -963,6 +963,117 @@ body {
 }
 .time-input-group label {
     font-size: 0.72rem;
+
+/* ============================================
+   登录 / 注册界面
+   ============================================ */
+
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+}
+
+.login-card {
+    width: 380px;
+    max-width: 90vw;
+    padding: 40px 32px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+}
+
+.login-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+}
+
+.login-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.login-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.login-field {
+    margin-bottom: 12px;
+}
+
+.login-field input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font);
+    outline: none;
+    transition: border-color var(--transition);
+}
+
+.login-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.login-error {
+    min-height: 22px;
+    font-size: 0.82rem;
+    color: var(--danger);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+}
+
+.login-switch {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.login-switch a {
+    color: var(--accent-light);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-switch a:hover {
+    text-decoration: underline;
+}
+
+/* --- 顶栏用户信息 --- */
+.user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-right: 4px;
+}
+
+.btn-small-logout {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-right: 8px;
+}
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
