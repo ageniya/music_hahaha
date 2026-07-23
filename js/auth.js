@@ -71,6 +71,11 @@ const LoginUI = {
     /** 需要隐藏/显示的主应用元素选择器 */
     _appSelectors: '.header, .main-container, .mini-player, .toast, .modal-overlay',
 
+    /** 获取登录容器（兼容新旧 HTML） */
+    _getLoginEl() {
+        return document.getElementById('loginPage') || document.getElementById('loginOverlay');
+    },
+
     init() {
         if (Auth.isLoggedIn()) {
             this.hide();
@@ -82,7 +87,8 @@ const LoginUI = {
     },
 
     show() {
-        document.getElementById('loginPage').style.display = 'flex';
+        const el = this._getLoginEl();
+        if (el) el.style.display = 'flex';
         // 隐藏主应用所有元素
         document.querySelectorAll(this._appSelectors).forEach(el => {
             el._prevDisplay = el.style.display;
@@ -91,12 +97,13 @@ const LoginUI = {
     },
 
     hide() {
-        document.getElementById('loginPage').style.display = 'none';
+        const el = this._getLoginEl();
+        if (el) el.style.display = 'none';
         // 恢复主应用元素
         document.querySelectorAll(this._appSelectors).forEach(el => {
             el.style.display = el._prevDisplay || '';
         });
-        // 显示 header（flex）
+        // 确保 header 恢复为 flex
         const header = document.querySelector('.header');
         if (header) header.style.display = '';
     },
