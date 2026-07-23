@@ -68,7 +68,9 @@ const Auth = {
 // ==================== 登录界面控制器 ====================
 
 const LoginUI = {
-    /** 初始化登录界面 */
+    /** 需要隐藏/显示的主应用元素选择器 */
+    _appSelectors: '.header, .main-container, .mini-player, .toast, .modal-overlay',
+
     init() {
         if (Auth.isLoggedIn()) {
             this.hide();
@@ -81,12 +83,22 @@ const LoginUI = {
 
     show() {
         document.getElementById('loginPage').style.display = 'flex';
-        document.getElementById('appMain').style.display = 'none';
+        // 隐藏主应用所有元素
+        document.querySelectorAll(this._appSelectors).forEach(el => {
+            el._prevDisplay = el.style.display;
+            el.style.display = 'none';
+        });
     },
 
     hide() {
         document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('appMain').style.display = 'block';
+        // 恢复主应用元素
+        document.querySelectorAll(this._appSelectors).forEach(el => {
+            el.style.display = el._prevDisplay || '';
+        });
+        // 显示 header（flex）
+        const header = document.querySelector('.header');
+        if (header) header.style.display = '';
     },
 
     _bindEvents() {
