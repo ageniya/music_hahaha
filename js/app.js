@@ -590,7 +590,14 @@ const App = {
         document.getElementById('filterScene').addEventListener('change', () => this.renderLibrary());
 
         // 上传 MP3（仅管理员）
-        document.getElementById('btnUpload').addEventListener('click', () => document.getElementById('fileUploadMp3').click());
+        document.getElementById('btnUpload').addEventListener('click', () => {
+            const pw = prompt('🔐 管理员验证 — 请输入密码：');
+            if (pw === 'ting2026') {
+                document.getElementById('fileUploadMp3').click();
+            } else if (pw !== null) {
+                this._toast('密码错误，仅管理员可更改曲库', 'error');
+            }
+        });
         document.getElementById('fileUploadMp3').addEventListener('change', (e) => this._handleUpload(e));
 
         // 拖拽上传
