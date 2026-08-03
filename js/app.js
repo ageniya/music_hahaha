@@ -674,11 +674,12 @@ const App = {
             return;
         }
 
-        // 按 audioUrl 路径构建文件夹树: data/audio2/父文件夹/子文件夹/文件.mp3
+        // 按 audioUrl 路径构建文件夹树
         const tree = {};
         for (const song of allSongs) {
             if (query && !song.title.toLowerCase().includes(query)) continue;
-            const parts = (song.audioUrl || '').replace('data/audio2/', '').split('/');
+            let path = (song.audioUrl || '').replace(/^.*?data\/audio2?\//, '');
+            const parts = path.split('/');
             const parent = parts[0] || '其他';
             const child = parts.length > 2 ? parts[1] : null;
             if (!tree[parent]) tree[parent] = { subs: {}, songs: [] };
