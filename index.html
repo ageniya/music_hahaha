@@ -38,28 +38,16 @@
                 <span class="song-count" id="libraryCount">0 首</span>
             </div>
 
-            <!-- 搜索与筛选 -->
+            <!-- 搜索 -->
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 搜索歌曲、歌手、专辑...">
-            </div>
-            <div class="filter-row">
-                <select id="filterGenre">
-                    <option value="">全部风格</option>
-                </select>
-                <select id="filterScene">
-                    <option value="">全部环节</option>
-                </select>
-                <select id="filterArtist">
-                    <option value="">全部歌手</option>
-                </select>
+                <input type="text" id="searchInput" placeholder="🔍 搜索歌曲...">
             </div>
 
-            <!-- 歌曲列表 -->
-            <div class="song-list" id="libraryList">
+            <!-- 文件夹树 -->
+            <div class="song-list folder-tree" id="libraryList">
                 <div class="empty-state">
                     <div class="empty-icon">🎶</div>
                     <p>还没有歌曲</p>
-                    <p class="empty-hint">点击「上传 MP3」或拖拽 MP3 文件到这里</p>
                 </div>
             </div>
         </aside>

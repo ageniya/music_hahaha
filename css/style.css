@@ -423,11 +423,113 @@ body::before {
     border-color: var(--accent);
 }
 
-/* --- 歌曲列表 --- */
-.song-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 4px 14px 14px;
+/* --- 文件夹树形结构 --- */
+.folder-tree {
+    padding: 4px 10px 14px;
+}
+
+.folder-group {
+    margin-bottom: 2px;
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.folder-header:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.folder-arrow {
+    font-size: 0.65rem;
+    transition: transform 0.2s;
+    width: 14px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.folder-group.open > .folder-header .folder-arrow {
+    transform: rotate(90deg);
+}
+
+.folder-icon {
+    font-size: 0.95rem;
+}
+
+.folder-count {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.folder-children {
+    display: none;
+    padding-left: 8px;
+}
+
+.folder-group.open > .folder-children {
+    display: block;
+}
+
+/* 子文件夹 */
+.folder-sub {
+    margin-bottom: 1px;
+}
+
+.folder-sub .folder-header {
+    font-size: 0.84rem;
+    font-weight: 500;
+    padding: 6px 8px 6px 20px;
+}
+
+.folder-sub .folder-children {
+    padding-left: 16px;
+}
+
+/* 树中的歌曲卡片缩小 */
+.folder-children .song-card {
+    padding: 6px 10px;
+    margin-left: 4px;
+    border-radius: 8px;
+    gap: 8px;
+}
+
+.folder-children .song-cover {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+}
+
+.folder-children .song-info .song-title {
+    font-size: 0.85rem;
+}
+
+.folder-children .song-info .song-meta {
+    font-size: 0.72rem;
+}
+
+.folder-children .song-duration {
+    font-size: 0.72rem;
+}
+
+.folder-children .btn-add {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+}
+
+.folder-children .song-actions {
+    gap: 2px;
 }
 
 .empty-state {

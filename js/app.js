@@ -556,7 +556,6 @@ const App = {
         Workspace._load();
 
         this.renderLibrary();
-        this.renderFilters();
         this.renderWorkspace();
         this.renderSavedPlaylists();
         this._bindEvents();
@@ -585,9 +584,6 @@ const App = {
 
     _bindEvents() {
         document.getElementById('searchInput').addEventListener('input', () => this.renderLibrary());
-        document.getElementById('filterGenre').addEventListener('change', () => this.renderLibrary());
-        document.getElementById('filterArtist').addEventListener('change', () => this.renderLibrary());
-        document.getElementById('filterScene').addEventListener('change', () => this.renderLibrary());
 
         // 上传 MP3（仅管理员）
         document.getElementById('btnUpload').addEventListener('click', () => {
@@ -664,12 +660,8 @@ const App = {
     // ==================== 渲染：音乐库（浏览，仅 + 按钮） ====================
 
     renderLibrary() {
-        const query = document.getElementById('searchInput').value;
-        const genre = document.getElementById('filterGenre').value;
-        const artist = document.getElementById('filterArtist').value;
-        const scene = document.getElementById('filterScene').value;
-
-        const songs = MusicData.search({ query, genre, artist, scene });
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const allSongs = MusicData.getAllSongs();
         const container = document.getElementById('libraryList');
         document.getElementById('libraryCount').textContent = `${MusicData.count} 首`;
 
@@ -677,33 +669,80 @@ const App = {
             container.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><p>正在加载音乐库...</p></div>`;
             return;
         }
-        if (songs.length === 0) {
-            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎶</div><p>${MusicData.count === 0 ? '还没有歌曲' : '没有匹配的歌曲'}</p><p class="empty-hint">${MusicData.count === 0 ? '上传 MP3 文件或拖拽文件到此处' : '试试其他搜索条件'}</p></div>`;
+        if (allSongs.length === 0) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎶</div><p>还没有歌曲</p></div>`;
             return;
         }
 
-        const wsSourceIds = new Set(Workspace.getAll().map(i => i.sourceId));
-        container.innerHTML = songs.map(song => {
-            const hasAudio = FileStorage.has(song.id) || !!song.audioUrl;
-            const sceneTag = song.scene ? `<span class="badge badge-scene">${this._esc(song.scene)}</span>` : '';
-            const cueTag = song.cue ? `<span class="badge badge-cue">${this._esc(song.cue)}</span>` : '';
-            const audioDot = hasAudio ? '<span class="audio-dot" title="可播放">🟢</span>' : '<span class="audio-dot dim" title="无音频">⚪</span>';
+        // 按 audioUrl 路径构建文件夹树: data/audio2/父文件夹/子文件夹/文件.mp3
+        const tree = {};
+        for (const song of allSongs) {
+            if (query && !song.title.toLowerCase().includes(query)) continue;
+            const parts = (song.audioUrl || '').replace('data/audio2/', '').split('/');
+            const parent = parts[0] || '其他';
+            const child = parts.length > 2 ? parts[1] : null;
+            if (!tree[parent]) tree[parent] = { subs: {}, songs: [] };
+            if (child) {
+                if (!tree[parent].subs[child]) tree[parent].subs[child] = [];
+                tree[parent].subs[child].push(song);
+            } else {
+                tree[parent].songs.push(song);
+            }
+        }
 
-            return `
-                <div class="song-card" data-id="${song.id}">
-                    <div class="song-cover">${song.cover ? `<img src="${this._esc(song.cover)}" onerror="this.parentElement.textContent='🎵'">` : '🎵'}</div>
-                    <div class="song-info">
-                        <div class="song-title">${audioDot}${this._esc(song.title)}${cueTag}${sceneTag}</div>
-                        <div class="song-meta">${this._esc(song.artist || song.originalTitle || '')}${song.note ? ` · ${this._esc(song.note)}` : ''}</div>
-                    </div>
-                    <div class="song-duration">${song.durationStr}</div>
-                    <div class="song-actions">
-                        <button class="btn-add" title="添加到我的工作区" data-action="add" data-id="${song.id}">+</button>
-                        <button class="btn-del" title="从曲库删除（需管理员密码）" data-action="delete" data-id="${song.id}">×</button>
-                    </div>
-                </div>`;
-        }).join('');
+        if (Object.keys(tree).length === 0) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>没有匹配的歌曲</p></div>`;
+            return;
+        }
 
+        let html = '';
+        const topFolders = Object.keys(tree).sort();
+        for (const folder of topFolders) {
+            const group = tree[folder];
+            const totalInFolder = group.songs.length + Object.values(group.subs).reduce((s, arr) => s + arr.length, 0);
+            html += `<div class="folder-group open">`;
+            html += `<div class="folder-header" data-folder="${this._esc(folder)}">`;
+            html += `<span class="folder-arrow">▶</span>`;
+            html += `<span class="folder-icon">📁</span>`;
+            html += `<span>${this._esc(folder)}</span>`;
+            html += `<span class="folder-count">${totalInFolder}</span>`;
+            html += `</div><div class="folder-children">`;
+
+            // 直接在此文件夹下的歌曲
+            for (const song of group.songs) {
+                html += this._renderSongCard(song);
+            }
+
+            // 子文件夹
+            const subFolders = Object.keys(group.subs).sort();
+            for (const sub of subFolders) {
+                html += `<div class="folder-sub open">`;
+                html += `<div class="folder-header" data-folder="${this._esc(folder)}/${this._esc(sub)}">`;
+                html += `<span class="folder-arrow">▶</span>`;
+                html += `<span class="folder-icon">📂</span>`;
+                html += `<span>${this._esc(sub)}</span>`;
+                html += `<span class="folder-count">${group.subs[sub].length}</span>`;
+                html += `</div><div class="folder-children">`;
+                for (const song of group.subs[sub]) {
+                    html += this._renderSongCard(song);
+                }
+                html += `</div></div>`;
+            }
+
+            html += `</div></div>`;
+        }
+
+        container.innerHTML = html;
+
+        // 绑定折叠事件
+        container.querySelectorAll('.folder-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const group = header.closest('.folder-group, .folder-sub');
+                group.classList.toggle('open');
+            });
+        });
+
+        // 绑定歌曲卡片事件
         container.querySelectorAll('.song-card').forEach(card => {
             const songId = card.dataset.id;
             card.addEventListener('dblclick', () => this._playLibrarySong(songId));
@@ -718,6 +757,23 @@ const App = {
         });
     },
 
+    _renderSongCard(song) {
+        const hasAudio = FileStorage.has(song.id) || !!song.audioUrl;
+        const audioDot = hasAudio ? '<span class="audio-dot" title="可播放">🟢</span>' : '<span class="audio-dot dim" title="无音频">⚪</span>';
+        return `
+            <div class="song-card" data-id="${song.id}">
+                <div class="song-cover">🎵</div>
+                <div class="song-info">
+                    <div class="song-title">${audioDot}${this._esc(song.title)}</div>
+                </div>
+                <div class="song-duration">${song.durationStr}</div>
+                <div class="song-actions">
+                    <button class="btn-add" title="添加到我的工作区" data-action="add" data-id="${song.id}">+</button>
+                    <button class="btn-del" title="从曲库删除（需管理员密码）" data-action="delete" data-id="${song.id}">×</button>
+                </div>
+            </div>`;
+    },
+
     /** 从曲库中删除歌曲 */
     _deleteFromLibrary(songId) {
         const song = MusicData.getSongById(songId);
@@ -730,12 +786,6 @@ const App = {
         } else if (pw !== null) {
             this._toast('密码错误，仅管理员可删除', 'error');
         }
-    },
-
-    renderFilters() {
-        document.getElementById('filterGenre').innerHTML = '<option value="">全部风格</option>' + MusicData.getGenres().map(g => `<option>${this._esc(g)}</option>`).join('');
-        document.getElementById('filterArtist').innerHTML = '<option value="">全部歌手</option>' + MusicData.getArtists().map(a => `<option>${this._esc(a)}</option>`).join('');
-        document.getElementById('filterScene').innerHTML = '<option value="">全部环节</option>' + MusicData.getScenes().map(s => `<option>${this._esc(s)}</option>`).join('');
     },
 
     // ==================== 渲染：我的工作区（可编辑） ====================
