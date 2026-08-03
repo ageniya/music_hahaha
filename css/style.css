@@ -225,6 +225,24 @@ body {
 .panel-playlist {
     flex: 1;
     min-width: 360px;
+    position: relative;
+}
+
+/* 工作区暗色 logo 水印 */
+.panel-playlist::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../images/logo-dark.png') center center no-repeat;
+    background-size: 200px auto;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.panel-playlist > * {
+    position: relative;
+    z-index: 1;
 }
 
 .divider {
