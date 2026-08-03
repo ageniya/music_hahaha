@@ -493,20 +493,25 @@ const ParticleBg = {
             if (p.y < -20) p.y = H + 20;
             if (p.y > H + 20) p.y = -20;
 
-            const alpha = p.alpha + Math.sin(p.pulse) * 0.2;
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-            glow.addColorStop(0, `rgba(${p.color}, ${Math.max(0.05, alpha)})`);
-            glow.addColorStop(0.4, `rgba(${p.color}, ${Math.max(0.02, alpha * 0.5)})`);
+            // 呼吸灯：alpha 在 0.2~0.9 之间正弦波动
+            const breathe = 0.35 + Math.sin(p.pulse) * 0.35;
+            const alpha = p.alpha * (0.5 + breathe);
+
+            // 外层大光晕
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+            glow.addColorStop(0, `rgba(${p.color}, ${Math.min(1, alpha)})`);
+            glow.addColorStop(0.3, `rgba(${p.color}, ${Math.min(0.8, alpha * 0.6)})`);
+            glow.addColorStop(0.6, `rgba(${p.color}, ${Math.min(0.3, alpha * 0.2)})`);
             glow.addColorStop(1, `rgba(${p.color}, 0)`);
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
             ctx.fillStyle = glow;
             ctx.fill();
 
             // 核心亮点
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${p.color}, ${Math.max(0.08, alpha)})`;
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.7, alpha * 0.9)})`;
             ctx.fill();
         }
     },
