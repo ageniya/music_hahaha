@@ -31,7 +31,7 @@
     --shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0,0,0,0.15);
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0,0,0,0.25);
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 /* --- 全局重置 --- */
