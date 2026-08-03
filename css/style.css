@@ -228,14 +228,14 @@ body {
     position: relative;
 }
 
-/* 工作区暗色 logo 水印 */
+/* 工作区白色 logo 水印 */
 .panel-playlist::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('../images/logo-dark.png') center center no-repeat;
-    background-size: 240px auto;
-    opacity: 0.12;
+    background: url('../images/logo-white.png') center center no-repeat;
+    background-size: 200px auto;
+    opacity: 0.08;
     pointer-events: none;
     z-index: 0;
 }
