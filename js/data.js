@@ -157,6 +157,75 @@ function writeStr(view, offset, str) {
     for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
 }
 
+// ==================== MP3 编码器 ====================
+
+const Mp3Encoder = {
+    _lameReady: false,
+    _lamePromise: null,
+
+    /** 加载 lamejs 库（CDN，首次调用时加载） */
+    _loadLame() {
+        if (this._lamePromise) return this._lamePromise;
+        this._lamePromise = new Promise((resolve, reject) => {
+            if (typeof lamejs !== 'undefined') {
+                this._lameReady = true;
+                resolve();
+                return;
+            }
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js';
+            s.onload = () => { this._lameReady = true; resolve(); };
+            s.onerror = () => reject(new Error('无法加载 lamejs'));
+            document.head.appendChild(s);
+        });
+        return this._lamePromise;
+    },
+
+    /** 将 AudioBuffer 编码为 MP3 ArrayBuffer */
+    async encode(audioBuffer, bitRate = 128) {
+        await this._loadLame();
+
+        const sampleRate = audioBuffer.sampleRate;
+        const numChannels = audioBuffer.numberOfChannels;
+        const left = audioBuffer.getChannelData(0);
+        const right = numChannels > 1 ? audioBuffer.getChannelData(1) : left;
+        const length = left.length;
+
+        // 转为 Int16 PCM
+        const leftPCM = new Int16Array(length);
+        const rightPCM = new Int16Array(length);
+        for (let i = 0; i < length; i++) {
+            leftPCM[i] = Math.max(-32768, Math.min(32767, left[i] * 32767));
+            rightPCM[i] = Math.max(-32768, Math.min(32767, right[i] * 32767));
+        }
+
+        // LAME 编码
+        const encoder = new lamejs.Mp3Encoder(numChannels, sampleRate, bitRate);
+        const blockSize = 1152;
+        const mp3Chunks = [];
+
+        for (let i = 0; i < length; i += blockSize) {
+            const leftChunk = leftPCM.subarray(i, i + blockSize);
+            const rightChunk = numChannels > 1 ? rightPCM.subarray(i, i + blockSize) : null;
+            const mp3buf = encoder.encodeBuffer(leftChunk, rightChunk);
+            if (mp3buf.length > 0) mp3Chunks.push(mp3buf);
+        }
+
+        const finalBuf = encoder.flush();
+        if (finalBuf.length > 0) mp3Chunks.push(finalBuf);
+
+        // 合并所有 MP3 数据块
+        const totalLength = mp3Chunks.reduce((sum, b) => sum + b.length, 0);
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of mp3Chunks) {
+            result.set(chunk, offset);
+            offset += chunk.length;
+        }
+        return result.buffer;
+    },
+};
+
 // ==================== 音乐库数据管理 ====================
 
 const MusicData = {
@@ -295,11 +364,11 @@ const MusicData = {
         return newSongs;
     },
 
-    addTrimmedSong(originalSong, trimmedBuffer, newTitle, trimStart, trimEnd) {
+    async addTrimmedSong(originalSong, trimmedBuffer, newTitle, trimStart, trimEnd) {
         const id = 'trim_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-        const wavBuf = WavEncoder.encode(trimmedBuffer);
+        const mp3Buf = await Mp3Encoder.encode(trimmedBuffer);
         const duration = trimEnd - trimStart;
-        FileStorage.set(id, wavBuf, newTitle + '.wav', 'audio/wav');
+        FileStorage.set(id, mp3Buf, newTitle + '.mp3', 'audio/mpeg');
         const song = this._normalizeSong({
             id, title: newTitle, artist: originalSong.artist || '', duration,
         });
@@ -478,10 +547,10 @@ const Workspace = {
     },
 
     /** 在工作区中保存剪辑版本 */
-    addTrimmed(wsItem, audioBuffer, newTitle, trimStart, trimEnd) {
+    async addTrimmed(wsItem, audioBuffer, newTitle, trimStart, trimEnd) {
         const trimFileId = 'trim_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-        const wavBuf = WavEncoder.encode(audioBuffer);
-        FileStorage.set(trimFileId, wavBuf, newTitle + '.wav', 'audio/wav');
+        const mp3Buf = await Mp3Encoder.encode(audioBuffer);
+        FileStorage.set(trimFileId, mp3Buf, newTitle + '.mp3', 'audio/mpeg');
         const duration = trimEnd - trimStart;
 
         const newItem = {

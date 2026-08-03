@@ -372,11 +372,13 @@ const AudioEditor = {
         // 保存到工作区
         const wsItem = App._editingWsItem;
         if (wsItem) {
-            Workspace.addTrimmed(wsItem, rendered, newTitle, this._trimStart, this._trimEnd);
+            App._toast('正在编码 MP3...', '');
+            await Workspace.addTrimmed(wsItem, rendered, newTitle, this._trimStart, this._trimEnd);
             App._editingWsItem = null;
         } else {
             // 向后兼容：如果没有工作区上下文，添加到曲库
-            MusicData.addTrimmedSong(this._song, rendered, newTitle, this._trimStart, this._trimEnd);
+            App._toast('正在编码 MP3...', '');
+            await MusicData.addTrimmedSong(this._song, rendered, newTitle, this._trimStart, this._trimEnd);
         }
 
         this.close();
@@ -891,7 +893,7 @@ const App = {
 
             if (item.isTrimmed && item.trimFileId && FileStorage.has(item.trimFileId)) {
                 buf = FileStorage.getBuffer(item.trimFileId);
-                ext = '.wav';
+                ext = '.mp3';
             } else if (FileStorage.has(item.sourceId)) {
                 buf = FileStorage.getBuffer(item.sourceId);
                 ext = '.mp3';
