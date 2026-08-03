@@ -442,15 +442,25 @@ const ParticleBg = {
             p.x += p.vx;
             p.y += p.vy;
             p.pulse += p.pulseSpeed;
-            if (p.x < -10) p.x = W + 10;
-            if (p.x > W + 10) p.x = -10;
-            if (p.y < -10) p.y = H + 10;
-            if (p.y > H + 10) p.y = -10;
+            if (p.x < -20) p.x = W + 20;
+            if (p.x > W + 20) p.x = -20;
+            if (p.y < -20) p.y = H + 20;
+            if (p.y > H + 20) p.y = -20;
 
-            const alpha = p.alpha + Math.sin(p.pulse) * 0.15;
+            const alpha = p.alpha + Math.sin(p.pulse) * 0.2;
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+            glow.addColorStop(0, `rgba(${p.color}, ${Math.max(0.05, alpha)})`);
+            glow.addColorStop(0.4, `rgba(${p.color}, ${Math.max(0.02, alpha * 0.5)})`);
+            glow.addColorStop(1, `rgba(${p.color}, 0)`);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+            ctx.fillStyle = glow;
+            ctx.fill();
+
+            // 核心亮点
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(124, 92, 252, ${Math.max(0, alpha)})`;
+            ctx.fillStyle = `rgba(${p.color}, ${Math.max(0.08, alpha)})`;
             ctx.fill();
         }
     },
