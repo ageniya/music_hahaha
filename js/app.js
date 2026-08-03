@@ -593,7 +593,12 @@ const App = {
         document.getElementById('btnUpload').addEventListener('click', () => {
             const pw = prompt('🔐 管理员验证 — 请输入密码：');
             if (pw === 'ting2026') {
-                document.getElementById('fileUploadMp3').click();
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.mp3';
+                input.multiple = true;
+                input.onchange = (e) => this._handleUpload(e);
+                input.click();
             } else if (pw !== null) {
                 this._toast('密码错误，仅管理员可更改曲库', 'error');
             }
