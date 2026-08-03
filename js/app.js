@@ -391,7 +391,7 @@ const AudioEditor = {
 
 const FloatingNotes = {
     _container: null,
-    _notes: ['🎵', '🎶', '✨', '💫', '🎼', '♫', '♪', '🎤'],
+    _notes: ['🎵', '🎶', '🎼', '♫', '♪', '🎤', '🎹', '🎸', '🎺', '🥁', '🎻', '🎷'],
     _timer: null,
 
     start() {
