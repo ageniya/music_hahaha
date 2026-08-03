@@ -402,17 +402,9 @@ const App = {
     // ==================== 初始化 ====================
 
     async init() {
-        // 登录检查
-        if (!Auth.isLoggedIn()) {
-            LoginUI.init();
-            return;
-        }
-
-        // 显示当前用户名
-        document.getElementById('headerUsername').textContent = Auth.currentUser();
-
         // 从 IndexedDB 恢复音频文件
         const restored = await FileStorage.restoreFromDB();
+        if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);
         if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);
 
         // 加载曲库元数据
@@ -632,6 +624,7 @@ const App = {
 
     // 累积未能自动加载的歌曲，用于批量文件选择器
     _pendingLoadSongs: [],
+    _loadingSongs: new Set(),
 
     _addToWorkspace(songId) {
         const song = MusicData.getSongById(songId);
@@ -642,21 +635,40 @@ const App = {
             return;
         }
         this.renderWorkspace();
-        this._toast(`已添加到工作区：${song.title}`, 'success');
+        this._toast(`已添加：${song.title}`, 'success');
 
-        // 后台自动加载音频文件（如果尚未在内存中）
+        // 立即加载音频
         this._loadAudioForSong(song);
     },
 
-    /** 后台加载歌曲的音频到内存（不阻塞 UI），失败时收集到批量加载队列 */
+    /** 加载歌曲音频到内存，成功后自动更新时长和界面 */
     async _loadAudioForSong(song) {
-        if (!song.audioUrl || FileStorage.has(song.id)) return;
-        const buf = await MusicData._fetchAudio(song.audioUrl);
+        if (!song.audioUrl) return;
+        if (FileStorage.has(song.id)) return;
+        if (this._loadingSongs.has(song.id)) return;
+
+        this._loadingSongs.add(song.id);
+        this._toast(`正在加载：${song.title}...`, '');
+
+        let buf = null;
+        try {
+            buf = await MusicData._fetchAudio(song.audioUrl);
+        } catch (e) {
+            buf = null;
+        }
+
+        this._loadingSongs.delete(song.id);
+
         if (buf) {
             FileStorage.set(song.id, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
+            // 检测真实时长
+            try { await MusicData._detectDuration(song.id); } catch (e) { /* skip */ }
+            this.renderWorkspace();
+            this._toast(`✅ ${song.title} 已就绪`, 'success');
             return;
         }
-        // 自动加载失败（file:// 协议等）→ 加入待批量加载队列，更新提示条
+
+        // 自动加载失败 → 加入待加载队列
         if (!this._pendingLoadSongs.find(s => s.id === song.id)) {
             this._pendingLoadSongs.push(song);
         }
