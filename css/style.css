@@ -261,6 +261,26 @@ body::before {
     50% { opacity: 0.8; left: 10px; right: 10px; }
 }
 
+/* 右下角浮动音符 */
+.main-container::after {
+    content: '🎵';
+    position: fixed;
+    bottom: 60px;
+    right: 40px;
+    font-size: 2rem;
+    opacity: 0.25;
+    animation: floatNote 5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes floatNote {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+    25% { transform: translateY(-30px) rotate(8deg); opacity: 0.35; }
+    50% { transform: translateY(-50px) rotate(-5deg); opacity: 0.15; }
+    75% { transform: translateY(-20px) rotate(3deg); opacity: 0.3; }
+}
+
 .panel-library {
     flex: 1;
     min-width: 360px;
