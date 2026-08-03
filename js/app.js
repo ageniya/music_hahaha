@@ -534,6 +534,10 @@ const App = {
     // ==================== 初始化 ====================
 
     async init() {
+        // 立即显示加载状态
+        this._isLoading = true;
+        this.renderLibrary();
+
         // 启动背景粒子动画
         ParticleBg.start();
         // 启动随机浮动音符
@@ -544,8 +548,6 @@ const App = {
         if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);
 
         // 加载曲库元数据（始终从内嵌数据加载）
-        this._isLoading = true;
-        this.renderLibrary();
         await MusicData.loadDefaultLibrary();
         this._isLoading = false;
         // 加载工作区
