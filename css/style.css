@@ -232,10 +232,10 @@ body {
 .panel-playlist::after {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: 20% 0 0 0;
     background: url('../images/logo-white.png') center center no-repeat;
-    background-size: 200px auto;
-    opacity: 0.08;
+    background-size: 360px auto;
+    opacity: 0.1;
     pointer-events: none;
     z-index: 0;
 }
@@ -243,6 +243,30 @@ body {
 .panel-playlist > * {
     position: relative;
     z-index: 1;
+}
+
+/* 工作区空状态 — 文字放顶部，不挡 logo */
+.playlist-list .empty-state {
+    justify-content: flex-start;
+    padding-top: 80px;
+    gap: 8px;
+}
+
+.playlist-list .empty-icon {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+    opacity: 0.4;
+}
+
+.playlist-list .empty-state p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.playlist-list .empty-hint {
+    font-size: 0.8rem !important;
+    color: rgba(255, 255, 255, 0.18) !important;
+    opacity: 1;
 }
 
 .divider {
