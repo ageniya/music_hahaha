@@ -1318,11 +1318,40 @@ const App = {
     async _handleUploadFiles(fileList) {
         const mp3Files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.mp3'));
         if (mp3Files.length === 0) { this._toast('请选择 MP3 文件', 'error'); return; }
-        this._toast(`正在导入 ${mp3Files.length} 个文件...`, '');
-        await MusicData.importFiles(mp3Files);
+
+        // 选择目标文件夹
+        const folder = this._pickFolder();
+        if (folder === null) return; // 用户取消
+
+        this._toast(`正在导入到「${folder}」...`, '');
+        await MusicData.importFiles(mp3Files, folder);
         this.renderLibrary();
-        this.renderFilters();
-        this._toast(`成功导入 ${mp3Files.length} 首歌曲到曲库`, 'success');
+        this._toast(`已导入 ${mp3Files.length} 首到「${folder}」`, 'success');
+    },
+
+    /** 弹窗选择目标文件夹 */
+    _pickFolder() {
+        const folders = this._getFolderList();
+        let msg = '📁 选择目标文件夹：\n\n';
+        folders.forEach((f, i) => { msg += `  ${i + 1}. ${f}\n`; });
+        msg += '\n输入序号，或输入新文件夹名：';
+        const input = prompt(msg, '');
+        if (!input) return null;
+        const num = parseInt(input);
+        if (!isNaN(num) && num >= 1 && num <= folders.length) return folders[num - 1];
+        return input.trim(); // 当作新文件夹名
+    },
+
+    /** 从现有曲库中提取文件夹列表 */
+    _getFolderList() {
+        const set = new Set();
+        for (const song of MusicData.getAllSongs()) {
+            const path = (song.audioUrl || '').replace(/^.*?data\/audio2?\//, '');
+            const parts = path.split('/');
+            if (parts[0]) set.add(parts[0]);
+            if (parts.length > 2 && parts[1]) set.add(parts[0] + '/' + parts[1]);
+        }
+        return [...set].sort();
     },
 
     // ==================== 工具 ====================

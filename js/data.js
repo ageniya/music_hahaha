@@ -311,7 +311,7 @@ const MusicData = {
         } catch (e) { /* skip */ }
     },
 
-    async importFiles(fileList) {
+    async importFiles(fileList, targetFolder = '') {
         const newSongs = [];
         for (const file of fileList) {
             const fname = file.name.toLowerCase();
@@ -324,7 +324,6 @@ const MusicData = {
             const cueMatch = file.name.match(/^([a-z])_/i);
             if (cueMatch) {
                 const cue = cueMatch[1].toLowerCase();
-                // 特殊处理：j 对应两个预设
                 if (cue === 'j') {
                     if (fname.includes('卡点') || fname.includes('come alive')) {
                         matched = this._songs.find(s => s.cue === 'J-1');
@@ -338,18 +337,18 @@ const MusicData = {
             }
 
             if (matched) {
-                // 匹配成功 → 将音频数据关联到预设歌曲
                 FileStorage.set(matched.id, buf, file.name, 'audio/mpeg');
                 matched._isUploaded = true;
                 matched._fileName = file.name;
                 await this._detectDuration(matched.id);
             } else {
-                // 未匹配 → 创建新歌曲条目
+                // 创建新歌曲条目
                 const id = 'file_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
                 FileStorage.set(id, buf, file.name, 'audio/mpeg');
                 const nameNoExt = file.name.replace(/\.mp3$/i, '');
                 const title = nameNoExt.replace(/^[a-z]_/i, '').slice(0, 50);
-                const song = this._normalizeSong({ id, title, artist: '', audioUrl: '' });
+                const folderPath = targetFolder ? `data/audio2/${targetFolder}/${file.name}` : '';
+                const song = this._normalizeSong({ id, title, artist: '', audioUrl: folderPath });
                 song._isUploaded = true;
                 song._fileName = file.name;
                 newSongs.push(song);
