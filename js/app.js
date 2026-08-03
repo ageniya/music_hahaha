@@ -699,6 +699,7 @@ const App = {
                     <div class="song-duration">${song.durationStr}</div>
                     <div class="song-actions">
                         <button class="btn-add" title="添加到我的工作区" data-action="add" data-id="${song.id}">+</button>
+                        <button class="btn-del" title="从曲库删除（需管理员密码）" data-action="delete" data-id="${song.id}">×</button>
                     </div>
                 </div>`;
         }).join('');
@@ -710,7 +711,25 @@ const App = {
                 e.stopPropagation();
                 this._addToWorkspace(songId);
             });
+            card.querySelector('[data-action="delete"]')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this._deleteFromLibrary(songId);
+            });
         });
+    },
+
+    /** 从曲库中删除歌曲 */
+    _deleteFromLibrary(songId) {
+        const song = MusicData.getSongById(songId);
+        if (!song) return;
+        const pw = prompt(`🔐 管理员验证 — 确认删除「${song.title}」？\n请输入密码：`);
+        if (pw === 'ting2026') {
+            MusicData.deleteSong(songId);
+            this.renderLibrary();
+            this._toast(`已删除：${song.title}`, 'success');
+        } else if (pw !== null) {
+            this._toast('密码错误，仅管理员可删除', 'error');
+        }
     },
 
     renderFilters() {
