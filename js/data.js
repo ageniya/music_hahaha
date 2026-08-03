@@ -244,9 +244,9 @@ const MusicData = {
             }
         } catch (e) { console.warn('内嵌数据解析失败:', e.message); }
 
-        // 2. 尝试从 data/songs.json 加载（HTTP 服务器模式）
+        // 2. 尝试从 data/songs-v2.json 加载（HTTP 服务器模式）
         try {
-            const resp = await fetch('data/songs.json');
+            const resp = await fetch('data/songs-v2.json');
             if (resp.ok) {
                 const data = await resp.json();
                 this._songs = data.map((s, i) => this._normalizeSong(s, i));
