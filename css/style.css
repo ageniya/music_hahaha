@@ -90,18 +90,13 @@ body {
 
 .header-left {
     display: flex;
-    align-items: baseline;
-    gap: 14px;
+    align-items: center;
+    gap: 16px;
 }
 
-.logo {
-    font-size: 1.6rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-light), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
+.header-logo {
+    height: 32px;
+    width: auto;
 }
 
 .subtitle {
@@ -1051,30 +1046,27 @@ body {
 }
 
 .login-icon {
-    font-size: 3.2rem;
-    margin-bottom: 14px;
-    filter: drop-shadow(0 3px 10px rgba(124, 92, 252, 0.35));
+    margin-bottom: 18px;
     animation: pulseIcon 2.5s ease-in-out infinite;
+}
+
+.login-icon .logo-img {
+    width: 130px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 @keyframes pulseIcon {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.07); }
-}
-
-.login-title {
-    font-size: 1.65rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: var(--text-primary);
-    letter-spacing: 0.04em;
+    50% { transform: scale(1.04); }
 }
 
 .login-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    margin-bottom: 36px;
-    letter-spacing: 0.04em;
+    margin-bottom: 34px;
+    letter-spacing: 0.06em;
 }
 
 .login-field {
