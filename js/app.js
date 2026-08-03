@@ -387,6 +387,72 @@ const AudioEditor = {
     },
 };
 
+// ==================== 背景粒子动画 ====================
+
+const ParticleBg = {
+    _canvas: null,
+    _ctx: null,
+    _particles: [],
+    _animId: null,
+
+    start() {
+        this._canvas = document.createElement('canvas');
+        this._canvas.id = 'particleCanvas';
+        Object.assign(this._canvas.style, {
+            position: 'fixed', inset: '0', zIndex: '0',
+            pointerEvents: 'none', opacity: '0.6',
+        });
+        document.body.prepend(this._canvas);
+        this._ctx = this._canvas.getContext('2d');
+        this._resize();
+        window.addEventListener('resize', () => this._resize());
+
+        const count = 35;
+        for (let i = 0; i < count; i++) {
+            this._particles.push({
+                x: Math.random() * this._canvas.width,
+                y: Math.random() * this._canvas.height,
+                r: Math.random() * 1.8 + 0.6,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3 - 0.15,
+                alpha: Math.random() * 0.5 + 0.2,
+                pulse: Math.random() * Math.PI * 2,
+                pulseSpeed: Math.random() * 0.02 + 0.005,
+            });
+        }
+        this._animate();
+    },
+
+    _resize() {
+        this._canvas.width = window.innerWidth;
+        this._canvas.height = window.innerHeight;
+    },
+
+    _animate() {
+        this._animId = requestAnimationFrame(() => this._animate());
+        const ctx = this._ctx;
+        const W = this._canvas.width;
+        const H = this._canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        for (const p of this._particles) {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.pulse += p.pulseSpeed;
+            if (p.x < -10) p.x = W + 10;
+            if (p.x > W + 10) p.x = -10;
+            if (p.y < -10) p.y = H + 10;
+            if (p.y > H + 10) p.y = -10;
+
+            const alpha = p.alpha + Math.sin(p.pulse) * 0.15;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(124, 92, 252, ${Math.max(0, alpha)})`;
+            ctx.fill();
+        }
+    },
+};
+
 // ==================== 主应用 ====================
 
 const App = {
@@ -404,6 +470,9 @@ const App = {
     // ==================== 初始化 ====================
 
     async init() {
+        // 启动背景粒子动画
+        ParticleBg.start();
+
         // 从 IndexedDB 恢复音频文件
         const restored = await FileStorage.restoreFromDB();
         if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);

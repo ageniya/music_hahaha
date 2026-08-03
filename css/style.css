@@ -241,6 +241,24 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-lg);
     margin: 8px;
+    position: relative;
+}
+
+/* 面板顶部微光流动 */
+.panel::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 40px; right: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124, 92, 252, 0.2), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 0.3; left: 60px; right: 60px; }
+    50% { opacity: 0.8; left: 10px; right: 10px; }
 }
 
 .panel-library {
