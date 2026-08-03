@@ -387,6 +387,52 @@ const AudioEditor = {
     },
 };
 
+// ==================== 浮动音符生成器 ====================
+
+const FloatingNotes = {
+    _container: null,
+    _notes: ['🎵', '🎶', '✨', '💫', '🎼', '♫', '♪', '🎤'],
+    _timer: null,
+
+    start() {
+        this._container = document.querySelector('.floating-notes');
+        if (!this._container) return;
+        this._container.innerHTML = '';
+        this._spawn();
+    },
+
+    _spawn() {
+        const note = document.createElement('span');
+        note.className = 'note-dynamic';
+        note.textContent = this._notes[Math.floor(Math.random() * this._notes.length)];
+
+        // 随机属性
+        const left = Math.random() * 90;
+        const size = 1.4 + Math.random() * 3.2;
+        const duration = 5 + Math.random() * 10;
+        const delay = Math.random() * 6;
+        const sway = (Math.random() - 0.5) * 100;
+
+        note.style.cssText = `
+            position: absolute;
+            left: ${left}%;
+            bottom: -30px;
+            font-size: ${size}rem;
+            opacity: 0;
+            pointer-events: none;
+            animation: floatRandom ${duration}s ease-in ${delay}s;
+            --sway: ${sway}px;
+        `;
+
+        note.addEventListener('animationend', () => note.remove());
+        this._container.appendChild(note);
+
+        // 随机间隔再生成下一个
+        const next = 600 + Math.random() * 2500;
+        this._timer = setTimeout(() => this._spawn(), next);
+    },
+};
+
 // ==================== 背景粒子动画 ====================
 
 const ParticleBg = {
@@ -485,6 +531,8 @@ const App = {
     async init() {
         // 启动背景粒子动画
         ParticleBg.start();
+        // 启动随机浮动音符
+        FloatingNotes.start();
 
         // 从 IndexedDB 恢复音频文件
         const restored = await FileStorage.restoreFromDB();
