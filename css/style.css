@@ -96,9 +96,9 @@ body::before {
     align-items: center;
     justify-content: space-between;
     padding: 16px 36px;
-    background: rgba(12, 12, 26, 0.75);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: rgba(12, 12, 26, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     position: sticky;
     top: 0;
@@ -235,10 +235,10 @@ body::before {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: rgba(18, 18, 31, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(18, 18, 31, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-lg);
     margin: 8px;
     position: relative;
