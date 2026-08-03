@@ -543,22 +543,17 @@ const App = {
         const restored = await FileStorage.restoreFromDB();
         if (restored > 0) console.log(`从缓存恢复了 ${restored} 个音频文件`);
 
-        // 加载曲库元数据
-        const libLoaded = MusicData._loadFromLocal();
-        if (!libLoaded) {
-            this._isLoading = true;
-            this.renderLibrary();
-            await MusicData.loadDefaultLibrary();
-            this._isLoading = false;
-        }
+        // 加载曲库元数据（始终从内嵌数据加载）
+        this._isLoading = true;
+        this.renderLibrary();
+        await MusicData.loadDefaultLibrary();
+        this._isLoading = false;
         // 加载工作区
         Workspace._load();
 
-        requestAnimationFrame(() => {
-            this.renderLibrary();
-            this.renderWorkspace();
-            this.renderSavedPlaylists();
-        });
+        this.renderLibrary();
+        this.renderWorkspace();
+        this.renderSavedPlaylists();
         this._bindEvents();
 
         // 为工作区中已有的歌曲加载音频（从上次会话恢复的条目）
