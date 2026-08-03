@@ -400,26 +400,27 @@ const ParticleBg = {
         this._canvas.id = 'particleCanvas';
         Object.assign(this._canvas.style, {
             position: 'fixed', inset: '0', zIndex: '0',
-            pointerEvents: 'none', opacity: '0.8',
+            pointerEvents: 'none',
         });
         document.body.prepend(this._canvas);
         this._ctx = this._canvas.getContext('2d');
         this._resize();
         window.addEventListener('resize', () => this._resize());
 
-        // 光点粒子
-        const count = 50;
+        // 大量光点
+        const count = 80;
         for (let i = 0; i < count; i++) {
+            const isGreen = Math.random() > 0.75;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
                 y: Math.random() * this._canvas.height,
-                r: Math.random() * 2.5 + 0.8,
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4 - 0.2,
-                alpha: Math.random() * 0.6 + 0.3,
+                r: Math.random() * 2.5 + 1,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5 - 0.25,
+                alpha: Math.random() * 0.7 + 0.3,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: Math.random() * 0.03 + 0.01,
-                color: Math.random() > 0.7 ? '52, 211, 153' : '124, 92, 252',
+                pulseSpeed: Math.random() * 0.04 + 0.015,
+                color: isGreen ? '52, 211, 153' : '124, 92, 252',
             });
         }
         this._animate();
