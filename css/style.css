@@ -52,10 +52,10 @@ body {
         radial-gradient(ellipse 60% 80% at 85% 90%, rgba(52, 211, 153, 0.04) 0%, transparent 55%),
         var(--bg-primary);
     color: var(--text-primary);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /* 背景微动光晕 */
@@ -225,7 +225,7 @@ body::before {
 .main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - 150px);
+    min-height: 0;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -235,6 +235,7 @@ body::before {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-height: 0;
     background: rgba(18, 18, 31, 0.2);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
