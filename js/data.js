@@ -9,19 +9,42 @@ const FileStorage = {
     _files: new Map(),
     _db: null,
 
-    /** 初始化 IndexedDB */
+    /** 初始化 IndexedDB（带超时保护，避免卡死） */
     async _initDB() {
         if (this._db) return;
         return new Promise((resolve, reject) => {
-            const req = indexedDB.open('musicbox_audio', 1);
+            let settled = false;
+            const timeout = setTimeout(() => {
+                if (!settled) { settled = true; resolve(); } // 超时也放行，走内存模式
+            }, 3000);
+
+            let req;
+            try {
+                req = indexedDB.open('musicbox_audio', 1);
+            } catch (e) {
+                clearTimeout(timeout);
+                resolve(); // IndexedDB 不可用，纯内存模式
+                return;
+            }
+
             req.onupgradeneeded = () => {
                 const db = req.result;
                 if (!db.objectStoreNames.contains('files')) {
                     db.createObjectStore('files', { keyPath: 'songId' });
                 }
             };
-            req.onsuccess = () => { this._db = req.result; resolve(); };
-            req.onerror = () => reject(req.error);
+            req.onsuccess = () => {
+                clearTimeout(timeout);
+                if (!settled) { settled = true; this._db = req.result; resolve(); }
+            };
+            req.onerror = () => {
+                clearTimeout(timeout);
+                if (!settled) { settled = true; resolve(); } // 出错也放行
+            };
+            req.onblocked = () => {
+                clearTimeout(timeout);
+                if (!settled) { settled = true; resolve(); }
+            };
         });
     },
 
