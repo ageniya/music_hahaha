@@ -695,7 +695,7 @@ const App = {
         }
 
         let html = '';
-        const topFolders = Object.keys(tree).sort();
+        const topFolders = Object.keys(tree); // 保持 JSON 中的文件夹顺序
         for (const folder of topFolders) {
             const group = tree[folder];
             const totalInFolder = group.songs.length + Object.values(group.subs).reduce((s, arr) => s + arr.length, 0);
@@ -713,7 +713,7 @@ const App = {
             }
 
             // 子文件夹
-            const subFolders = Object.keys(group.subs).sort();
+            const subFolders = Object.keys(group.subs); // 保持插入顺序
             for (const sub of subFolders) {
                 html += `<div class="folder-sub open">`;
                 html += `<div class="folder-header" data-folder="${this._esc(folder)}/${this._esc(sub)}">`;
