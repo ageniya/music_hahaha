@@ -272,9 +272,14 @@ const MusicData = {
 
     /** 通用的音频加载：优先 fetch，失败回退 XHR（兼容 file:// 协议） */
     async _fetchAudio(url) {
+        // 编码 URL 中的特殊字符（#、空格等），防止被浏览器解析为锚点
+        const safeUrl = url.split('/').map((part, i, arr) =>
+            i === arr.length - 1 ? encodeURIComponent(part) : part
+        ).join('/');
+
         // 尝试 fetch
         try {
-            const resp = await fetch(url);
+            const resp = await fetch(safeUrl);
             if (resp.ok) return await resp.arrayBuffer();
         } catch (e) { /* fetch 不可用时尝试 XHR */ }
 
@@ -282,7 +287,7 @@ const MusicData = {
         try {
             return await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
+                xhr.open('GET', safeUrl, true);
                 xhr.responseType = 'arraybuffer';
                 xhr.onload = () => {
                     if (xhr.status === 200 || xhr.status === 0) resolve(xhr.response);

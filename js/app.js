@@ -999,10 +999,8 @@ const App = {
             return;
         }
         this._toast('正在加载音频...', '');
-        fetch(srcSong.audioUrl).then(r => {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.arrayBuffer();
-        }).then(buf => {
+        MusicData._fetchAudio(srcSong.audioUrl).then(buf => {
+            if (!buf) throw new Error('加载失败');
             FileStorage.set(srcSong.id, buf, srcSong.audioUrl.split('/').pop(), 'audio/mpeg');
             App._launchEditor(item, buf);
         }).catch(() => {
@@ -1202,10 +1200,8 @@ const App = {
         if (FileStorage.has(sid)) { callback(); return; }
         if (!song.audioUrl) { this._toast('该歌曲没有音频文件', 'error'); return; }
         this._toast('正在加载音频...', '');
-        fetch(song.audioUrl).then(r => {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.arrayBuffer();
-        }).then(buf => {
+        MusicData._fetchAudio(song.audioUrl).then(buf => {
+            if (!buf) throw new Error('加载失败');
             FileStorage.set(sid, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
             callback();
         }).catch(() => {
