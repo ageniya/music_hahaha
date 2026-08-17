@@ -56,6 +56,7 @@ const FileStorage = {
     async _saveToDB(songId, arrayBuffer, fileName, mimeType) {
         try {
             await this._initDB();
+            if (!this._db) return;
             const tx = this._db.transaction('files', 'readwrite');
             tx.objectStore('files').put({ songId, arrayBuffer, fileName, mimeType });
         } catch (e) { /* IndexedDB may not be available */ }
@@ -89,6 +90,7 @@ const FileStorage = {
     async _deleteFromDB(songId) {
         try {
             await this._initDB();
+            if (!this._db) return;
             const tx = this._db.transaction('files', 'readwrite');
             tx.objectStore('files').delete(songId);
         } catch (e) { /* ignore */ }
@@ -108,6 +110,7 @@ const FileStorage = {
     async restoreFromDB() {
         try {
             await this._initDB();
+            if (!this._db) return 0; // IndexedDB 不可用
             return new Promise((resolve) => {
                 const tx = this._db.transaction('files', 'readonly');
                 const req = tx.objectStore('files').getAll();
