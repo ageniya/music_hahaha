@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
     <link rel="stylesheet" href="css/style.css?v=20260803e">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
     <!-- 主体布局 -->
     <div class="main-container">
         <!-- 左侧：音乐库 -->
-        <aside class="panel panel-library" id="panelLibrary">
+        <aside class="panel panel-library active" id="panelLibrary">
             <div class="panel-header">
                 <h2>📚 音乐库</h2>
                 <span class="song-count" id="libraryCount">0 首</span>
@@ -94,6 +94,18 @@
             </div>
         </main>
     </div>
+
+    <!-- 移动端底部 Tab 栏（仅手机显示） -->
+    <nav class="mobile-tabs" id="mobileTabs">
+        <button class="mobile-tab active" data-panel="panelLibrary" type="button">
+            <span class="mobile-tab-icon">📚</span>
+            <span class="mobile-tab-label">音乐库</span>
+        </button>
+        <button class="mobile-tab" data-panel="panelPlaylist" type="button">
+            <span class="mobile-tab-icon">🛠️</span>
+            <span class="mobile-tab-label">工作区<span class="mobile-tab-badge" id="mobileWsBadge" hidden>0</span></span>
+        </button>
+    </nav>
 
     <!-- 音乐播放器（底部迷你栏） -->
     <div class="mini-player" id="miniPlayer" style="display:none;">

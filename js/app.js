@@ -568,6 +568,13 @@ const App = {
         this.player.audio.volume = 0.7;
     },
 
+    /** 是否触屏设备（手机/平板/触屏笔记本） */
+    _isTouch() {
+        return window.matchMedia('(pointer: coarse)').matches
+            || navigator.maxTouchPoints > 0
+            || 'ontouchstart' in window;
+    },
+
     /** 为工作区中所有条目加载音频（后台静默执行） */
     _loadAudioForWorkspace() {
         const items = Workspace.getAll();
@@ -582,6 +589,18 @@ const App = {
 
     _bindEvents() {
         document.getElementById('searchInput').addEventListener('input', () => this.renderLibrary());
+
+        // 移动端底部 Tab 切换
+        document.querySelectorAll('.mobile-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const panel = document.getElementById(tab.dataset.panel);
+                if (!panel) return;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                panel.classList.add('active');
+                document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
 
         // 上传 MP3（仅管理员）
         document.getElementById('btnUpload').addEventListener('click', () => {
@@ -741,7 +760,15 @@ const App = {
         // 绑定歌曲卡片事件
         container.querySelectorAll('.song-card').forEach(card => {
             const songId = card.dataset.id;
-            card.addEventListener('dblclick', () => this._playLibrarySong(songId));
+            if (this._isTouch()) {
+                // 触屏：单击卡片主体即试听（操作按钮不拦截）
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.song-actions')) return;
+                    this._playLibrarySong(songId);
+                });
+            } else {
+                card.addEventListener('dblclick', () => this._playLibrarySong(songId));
+            }
             card.querySelector('[data-action="add"]')?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this._addToWorkspace(songId);
@@ -792,6 +819,13 @@ const App = {
         document.getElementById('playlistCount').textContent = `${items.length} 首`;
         document.getElementById('playlistTotalDuration').textContent = MusicData._formatDuration(Workspace.getTotalDuration());
 
+        // 更新移动端工作区 Tab 徽章
+        const wsBadge = document.getElementById('mobileWsBadge');
+        if (wsBadge) {
+            wsBadge.textContent = items.length;
+            wsBadge.hidden = items.length === 0;
+        }
+
         if (items.length === 0) {
             container.innerHTML = `<div class="empty-state"><div class="empty-icon">🛠️</div><p>工作区是空的</p><p class="empty-hint">从左侧音乐库点击 <strong>+</strong> 添加歌曲到工作区</p></div>`;
             return;
@@ -822,7 +856,15 @@ const App = {
 
         container.querySelectorAll('.ws-card').forEach(card => {
             const wsId = card.dataset.wsId;
-            card.addEventListener('dblclick', () => this._playWorkspaceSong(wsId));
+            if (this._isTouch()) {
+                // 触屏：单击卡片主体即播放（操作按钮不拦截）
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.song-actions')) return;
+                    this._playWorkspaceSong(wsId);
+                });
+            } else {
+                card.addEventListener('dblclick', () => this._playWorkspaceSong(wsId));
+            }
             card.querySelector('[data-action="edit-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._openEditorForWs(wsId); });
             card.querySelector('[data-action="rename-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._renameWsItem(wsId); });
             card.querySelector('[data-action="remove-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._removeFromWorkspace(wsId); });
@@ -1164,12 +1206,12 @@ const App = {
         const song = MusicData.getSongById(songId);
         if (!song) return;
         this._ensureAudio(song, () => {
-            const allSongs = MusicData.search({
-                query: document.getElementById('searchInput').value,
-                genre: document.getElementById('filterGenre').value,
-                artist: document.getElementById('filterArtist').value,
-                scene: document.getElementById('filterScene').value,
-            }).filter(s => FileStorage.has(s.id) || s.audioUrl);
+            // 播放列表 = 当前搜索范围内所有有音频的歌（不再依赖已删除的筛选下拉框）
+            const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+            const allSongs = MusicData.getAllSongs().filter(s => {
+                if (query && !s.title.toLowerCase().includes(query)) return false;
+                return FileStorage.has(s.id) || s.audioUrl;
+            });
             this.player.playlist = allSongs;
             this.player.currentIndex = allSongs.findIndex(s => s.id === songId);
             this._loadAndPlay(song);

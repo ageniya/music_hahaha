@@ -43,6 +43,8 @@
 
 html {
     font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
@@ -53,6 +55,7 @@ body {
         var(--bg-primary);
     color: var(--text-primary);
     height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1070,56 +1073,259 @@ body::before {
     to { transform: translateY(0); opacity: 1; }
 }
 
+/* --- 移动端底部 Tab 栏（默认隐藏，仅小屏显示） --- */
+.mobile-tabs {
+    display: none;
+    user-select: none;
+}
+
 /* --- 响应式 --- */
 @media (max-width: 768px) {
     body {
         overflow: hidden;
         height: 100vh;
+        height: 100dvh;
     }
     .header {
-        padding: 10px 14px;
+        padding: 10px 12px;
         flex-shrink: 0;
     }
     .header-logo {
-        height: 40px;
+        height: 36px;
     }
     .subtitle {
         display: none;
     }
+    .header-right {
+        gap: 8px;
+    }
+    .header-right .btn {
+        padding: 9px 12px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
     .main-container {
         flex-direction: column;
-        height: auto;
         flex: 1;
         min-height: 0;
+        height: auto;
+        padding: 0;
     }
+
+    /* 底部 Tab 栏 */
+    .mobile-tabs {
+        display: flex;
+        flex-shrink: 0;
+        background: rgba(12, 12, 26, 0.88);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding-bottom: env(safe-area-inset-bottom);
+        z-index: 90;
+    }
+    .mobile-tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 8px 0 6px;
+        background: transparent;
+        border: none;
+        border-top: 2px solid transparent;
+        color: var(--text-muted);
+        font-size: 0.68rem;
+        font-weight: 500;
+        font-family: var(--font);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: color 0.2s, background 0.2s;
+    }
+    .mobile-tab.active {
+        color: var(--accent-light);
+        border-top-color: var(--accent);
+        background: rgba(124, 92, 252, 0.08);
+    }
+    .mobile-tab-icon {
+        font-size: 1.3rem;
+        line-height: 1;
+    }
+    .mobile-tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 5px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.6rem;
+        font-weight: 700;
+        margin-left: 4px;
+        vertical-align: 1px;
+    }
+    .mobile-tab-badge[hidden] {
+        display: none;
+    }
+
+    /* 面板：一次只显示一个，占满可用空间 */
     .panel {
+        display: none;
         margin: 6px;
         min-height: 0;
+        border-radius: 16px;
     }
-    .panel-library {
-        max-width: 100%;
+    .panel.active {
+        display: flex;
         flex: 1;
-        min-height: 0;
     }
+    .panel-library,
     .panel-playlist {
+        max-width: 100%;
+        min-width: 0;
+        width: auto;
         flex: 1;
-        min-height: 0;
     }
     .divider {
         display: none;
     }
+
+    /* 面板头 / 搜索 / 列表内边距收紧 */
+    .panel-header {
+        padding: 14px 14px 10px;
+    }
+    .search-box {
+        padding: 0 12px 10px;
+    }
+    .playlist-name-row {
+        padding: 0 12px 8px;
+    }
+    .folder-tree {
+        padding: 4px 6px 14px;
+    }
+    .playlist-list {
+        padding: 4px 8px 14px;
+    }
+
+    /* 触控目标加大（≥40px） */
+    .folder-header {
+        padding: 12px 10px;
+        min-height: 44px;
+    }
+    .folder-arrow {
+        font-size: 0.75rem;
+    }
+    .song-card {
+        padding: 10px 8px;
+        gap: 10px;
+    }
+    .folder-children .song-card {
+        padding: 8px 8px;
+    }
+    .btn-add,
+    .btn-del,
+    .btn-remove,
+    .btn-icon-mini,
+    .folder-children .btn-add {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+    .song-actions {
+        gap: 6px;
+    }
+    .song-duration {
+        font-size: 0.78rem;
+    }
+
+    /* 输入框字号 ≥16px 防 iOS 自动放大 */
+    .search-box input,
+    .playlist-name-row input {
+        font-size: 16px;
+    }
+
+    /* 工作区底部按钮组 → 网格布局 */
+    .playlist-footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    }
+    .playlist-footer .btn {
+        padding: 11px 4px;
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+    .playlist-footer .saved-select {
+        grid-column: span 2;
+        width: 100%;
+        min-width: 0;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .playlist-footer #btnDeleteSaved {
+        grid-column: span 1;
+    }
+
+    /* 迷你播放器：两行布局 */
     .mini-player {
         flex-wrap: wrap;
         height: auto;
-        padding: 10px 16px;
-        gap: 8px;
+        padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+        gap: 6px 10px;
+        background: rgba(18, 18, 31, 0.95);
+    }
+    .player-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .player-controls .btn-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
     }
     .player-progress {
         order: 10;
         width: 100%;
+        flex-basis: 100%;
     }
-    .playlist-footer {
-        flex-wrap: wrap;
+    .player-time {
+        min-width: 70px;
+    }
+
+    /* 提示消息避开 Tab 栏 */
+    .toast {
+        bottom: calc(150px + env(safe-area-inset-bottom));
+        width: max-content;
+        max-width: 86vw;
+        text-align: center;
+    }
+
+    /* 模态框铺满 */
+    .modal {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 10px;
+        padding: 20px 16px;
+    }
+    .editor-modal {
+        margin: 0 6px;
+    }
+    .editor-body {
+        padding: 12px 14px 16px;
+    }
+    .editor-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+    .editor-row label {
+        min-width: 0;
     }
 }
 
