@@ -272,26 +272,59 @@ const MusicData = {
 
     /** 通用的音频加载：优先 fetch，失败回退 XHR（兼容 file:// 协议） */
     async _fetchAudio(url) {
+        return this._fetchAudioWithProgress(url, null);
+    },
+
+    /** 带进度回调的音频下载：优先 fetch 流式读取，回退 XHR progress */
+    async _fetchAudioWithProgress(url, onProgress) {
         // 编码 URL 中的特殊字符（#、空格等），防止被浏览器解析为锚点
         const safeUrl = url.split('/').map((part, i, arr) =>
             i === arr.length - 1 ? encodeURIComponent(part) : part
         ).join('/');
 
-        // 尝试 fetch
+        // 方式 1：fetch + ReadableStream 获取下载进度
         try {
             const resp = await fetch(safeUrl);
-            if (resp.ok) return await resp.arrayBuffer();
-        } catch (e) { /* fetch 不可用时尝试 XHR */ }
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const total = Number(resp.headers.get('Content-Length')) || 0;
+            if (resp.body && total > 0) {
+                const reader = resp.body.getReader();
+                const chunks = [];
+                let received = 0;
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    chunks.push(value);
+                    received += value.length;
+                    if (onProgress) onProgress(Math.min(100, Math.round(received / total * 100)));
+                }
+                const buf = new Uint8Array(received);
+                let offset = 0;
+                for (const c of chunks) { buf.set(c, offset); offset += c.length; }
+                if (onProgress) onProgress(100);
+                return buf.buffer;
+            }
+            const buf = await resp.arrayBuffer();
+            if (onProgress) onProgress(100);
+            return buf;
+        } catch (e) { /* fetch 失败回退 XHR */ }
 
-        // 回退：XMLHttpRequest（部分浏览器允许 file:// 下使用 XHR）
+        // 方式 2：XMLHttpRequest + progress 事件
         try {
             return await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', safeUrl, true);
                 xhr.responseType = 'arraybuffer';
+                xhr.onprogress = (e) => {
+                    if (e.lengthComputable && onProgress) {
+                        onProgress(Math.min(100, Math.round(e.loaded / e.total * 100)));
+                    }
+                };
                 xhr.onload = () => {
-                    if (xhr.status === 200 || xhr.status === 0) resolve(xhr.response);
-                    else resolve(null);
+                    if (xhr.status === 200 || xhr.status === 0) {
+                        if (onProgress) onProgress(100);
+                        resolve(xhr.response);
+                    } else resolve(null);
                 };
                 xhr.onerror = () => resolve(null);
                 xhr.send();

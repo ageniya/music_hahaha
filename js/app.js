@@ -614,9 +614,6 @@ const App = {
         // 导出信息
         document.getElementById('btnExportPlaylist').addEventListener('click', () => this._exportWorkspaceInfo());
 
-        // 批量加载音频（提示条按钮）
-        document.getElementById('btnLoadAudio').addEventListener('click', () => this._openBatchFilePicker());
-
         // 清空工作区
         document.getElementById('btnClearPlaylist').addEventListener('click', () => {
             if (Workspace.count === 0) return;
@@ -839,130 +836,96 @@ const App = {
 
     // ==================== 工作区操作 ====================
 
-    // 累积未能自动加载的歌曲，用于批量文件选择器
-    _pendingLoadSongs: [],
     _loadingSongs: new Set(),
 
-    _addToWorkspace(songId) {
+    async _addToWorkspace(songId) {
         const song = MusicData.getSongById(songId);
         if (!song) return;
-        const result = Workspace.addFromLibrary(song);
-        if (!result) {
+
+        // 已存在检查
+        if (Workspace.getAll().find(item => item.sourceId === songId && !item.isTrimmed)) {
             this._toast('这首歌已在工作区中', 'error');
             return;
         }
-        this.renderWorkspace();
-        this._toast(`已添加：${song.title}`, 'success');
+        if (this._loadingSongs.has(song.id)) {
+            this._toast('正在加载中，请稍候...', '');
+            return;
+        }
+        if (!song.audioUrl) {
+            this._toast('该歌曲没有音频文件', 'error');
+            return;
+        }
 
-        // 立即加载音频
-        this._loadAudioForSong(song);
+        // 开始加载，显示进度条
+        this._loadingSongs.add(song.id);
+        this._showProgress(`正在加载：${song.title}`);
+
+        let buf = null;
+        if (FileStorage.has(song.id)) {
+            buf = FileStorage.getBuffer(song.id);
+            this._updateProgressBar(100);
+        } else {
+            buf = await MusicData._fetchAudioWithProgress(song.audioUrl, (pct) => {
+                this._updateProgressBar(pct);
+            });
+        }
+
+        this._loadingSongs.delete(song.id);
+        this._hideProgress();
+
+        if (!buf) {
+            this._toast(`加载失败：${song.title}`, 'error');
+            return;
+        }
+
+        // 存入内存
+        FileStorage.set(song.id, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
+        try { await MusicData._detectDuration(song.id); } catch (e) { /* skip */ }
+
+        // 加载完成 → 才加入工作区
+        const result = Workspace.addFromLibrary(song);
+        this.renderWorkspace();
+        this._toast(`✅ 已添加：${song.title}`, 'success');
     },
 
-    /** 加载歌曲音频到内存，成功后自动更新时长和界面 */
+    /** 显示加载进度条 */
+    _showProgress(title) {
+        document.getElementById('loadProgressTitle').textContent = title;
+        document.getElementById('loadProgressPct').textContent = '0%';
+        document.getElementById('loadProgressFill').style.width = '0%';
+        document.getElementById('loadProgress').style.display = 'block';
+    },
+
+    /** 更新进度条 */
+    _updateProgressBar(pct) {
+        document.getElementById('loadProgressPct').textContent = pct + '%';
+        document.getElementById('loadProgressFill').style.width = pct + '%';
+    },
+
+    /** 隐藏进度条 */
+    _hideProgress() {
+        document.getElementById('loadProgress').style.display = 'none';
+    },
+
+    /** 后台加载歌曲音频到内存（用于恢复会话），不显示进度条 */
     async _loadAudioForSong(song) {
         if (!song.audioUrl) return;
         if (FileStorage.has(song.id)) return;
         if (this._loadingSongs.has(song.id)) return;
 
         this._loadingSongs.add(song.id);
-        this._toast(`正在加载：${song.title}...`, '');
-
         let buf = null;
         try {
             buf = await MusicData._fetchAudio(song.audioUrl);
         } catch (e) {
             buf = null;
         }
-
         this._loadingSongs.delete(song.id);
 
         if (buf) {
             FileStorage.set(song.id, buf, song.audioUrl.split('/').pop(), 'audio/mpeg');
-            // 检测真实时长
             try { await MusicData._detectDuration(song.id); } catch (e) { /* skip */ }
             this.renderWorkspace();
-            this._toast(`✅ ${song.title} 已就绪`, 'success');
-            return;
-        }
-
-        // 自动加载失败 → 加入待加载队列
-        if (!this._pendingLoadSongs.find(s => s.id === song.id)) {
-            this._pendingLoadSongs.push(song);
-        }
-        this._updateAudioBanner();
-    },
-
-    /** 更新音频加载提示条 */
-    _updateAudioBanner() {
-        const banner = document.getElementById('audioBanner');
-        const countEl = document.getElementById('audioBannerCount');
-        const count = this._pendingLoadSongs.length;
-        if (count > 0) {
-            banner.style.display = 'flex';
-            countEl.textContent = count;
-        } else {
-            banner.style.display = 'none';
-        }
-    },
-
-    /** 打开批量文件选择器（必须在用户手势中调用！） */
-    _openBatchFilePicker() {
-        if (this._pendingLoadSongs.length === 0) return;
-
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.mp3';
-        input.multiple = true;
-
-        // 用户取消 → 窗口重新获得焦点时清理
-        const onFocus = () => {
-            window.removeEventListener('focus', onFocus);
-            setTimeout(() => {
-                if (input.parentNode) input.remove();
-            }, 500);
-        };
-        window.addEventListener('focus', onFocus);
-
-        input.onchange = async () => {
-            window.removeEventListener('focus', onFocus);
-            await this._processBatchFiles(input.files);
-            this._updateAudioBanner();
-            input.remove();
-        };
-
-        document.body.appendChild(input);
-        this._toast(`请选择 data/audio/ 文件夹中的 MP3 文件（可 Ctrl+A 全选）`, '');
-        input.click();
-    },
-
-    /** 处理批量选择的文件 */
-    async _processBatchFiles(fileList) {
-        const files = Array.from(fileList);
-        const pending = [...this._pendingLoadSongs];
-        if (files.length === 0) return;
-
-        this._toast(`正在加载 ${files.length} 个音频文件...`, '');
-        let loaded = 0;
-
-        for (const file of files) {
-            const fname = file.name;
-            const matched = pending.find(s => {
-                if (!s.audioUrl) return false;
-                return fname.toLowerCase() === s.audioUrl.split('/').pop().toLowerCase();
-            });
-            if (matched && !FileStorage.has(matched.id)) {
-                const buf = await file.arrayBuffer();
-                FileStorage.set(matched.id, buf, file.name, 'audio/mpeg');
-                // 从待加载列表中移除已成功加载的
-                this._pendingLoadSongs = this._pendingLoadSongs.filter(s => s.id !== matched.id);
-                loaded++;
-            }
-        }
-
-        if (loaded > 0) {
-            this._toast(`已加载 ${loaded} 首歌曲音频`, 'success');
-        } else {
-            this._toast('未匹配到音频文件，请确保文件名与曲库一致', 'error');
         }
     },
 
@@ -1075,23 +1038,11 @@ const App = {
         let missingCount = 0;
         await Promise.all(items.map(async item => {
             const ok = await this._ensureAudioForExport(item);
-            if (!ok) {
-                missingCount++;
-                // 收集缺失项，更新提示条
-                if (!item.isTrimmed) {
-                    const src = MusicData.getSongById(item.sourceId);
-                    if (src && src.audioUrl && !FileStorage.has(src.id)) {
-                        if (!this._pendingLoadSongs.find(s => s.id === src.id)) {
-                            this._pendingLoadSongs.push(src);
-                        }
-                    }
-                }
-            }
+            if (!ok) missingCount++;
         }));
 
         if (missingCount > 0) {
-            this._updateAudioBanner();
-            this._toast(`有 ${missingCount} 首歌曲音频缺失，请先点击工作区上方「📥 一键加载音频」`, 'error');
+            this._toast(`有 ${missingCount} 首歌曲音频缺失，请重新点击 + 添加`, 'error');
             return;
         }
 

@@ -73,12 +73,6 @@
                 <input type="text" id="playlistName" placeholder="输入歌单名称..." value="婚礼歌单">
             </div>
 
-            <!-- 音频未加载提示条（file:// 协议等场景） -->
-            <div class="audio-banner" id="audioBanner" style="display:none;">
-                <span>⚠️ 有 <strong id="audioBannerCount">0</strong> 首歌曲音频未加载</span>
-                <button class="btn btn-small btn-primary" id="btnLoadAudio">📥 一键加载音频</button>
-            </div>
-
             <!-- 歌单歌曲列表 -->
             <div class="song-list playlist-list" id="playlistList">
                 <div class="empty-state">
@@ -127,6 +121,17 @@
 
     <!-- 提示消息 -->
     <div class="toast" id="toast"></div>
+
+    <!-- 音频加载进度条 -->
+    <div class="load-progress" id="loadProgress" style="display:none;">
+        <div class="load-progress-head">
+            <span class="load-progress-title" id="loadProgressTitle">正在加载...</span>
+            <span class="load-progress-pct" id="loadProgressPct">0%</span>
+        </div>
+        <div class="load-progress-track">
+            <div class="load-progress-fill" id="loadProgressFill"></div>
+        </div>
+    </div>
 
     <!-- 音频剪辑器模态框 -->
     <div class="modal-overlay" id="editorOverlay" style="display:none;">
