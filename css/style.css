@@ -436,6 +436,22 @@ body::before {
     padding: 4px 10px 14px;
 }
 
+.library-contact {
+    flex-shrink: 0;
+    padding: 9px 16px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.library-contact span {
+    color: var(--accent-light);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
 /* 工作区歌曲列表独立滚动 */
 .playlist-list {
     flex: 1;
@@ -820,6 +836,88 @@ body::before {
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
+}
+
+/* --- 网页宠物 --- */
+.web-pet {
+    --look-x: 0px;
+    --look-y: 0px;
+    position: fixed;
+    right: 22px;
+    bottom: 72px;
+    width: 210px;
+    z-index: 80;
+    pointer-events: auto;
+    animation: petFloat 3.8s ease-in-out infinite;
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.28));
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.web-pet.dragging {
+    cursor: grabbing;
+    animation-play-state: paused;
+}
+
+.web-pet-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: rgba(8, 8, 15, 0.66);
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s, color 0.2s;
+}
+
+.web-pet:hover .web-pet-close,
+.web-pet:focus-within .web-pet-close {
+    opacity: 1;
+}
+
+.web-pet-close:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.web-pet img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.pet-pupil {
+    position: absolute;
+    width: 12px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(25, 13, 62, 0.72);
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.35) inset;
+    transform: translate(calc(-50% + var(--look-x)), calc(-50% + var(--look-y)));
+    transition: transform 0.12s ease-out;
+}
+
+.pet-pupil-left {
+    left: 45.0%;
+    top: 37.8%;
+}
+
+.pet-pupil-right {
+    left: 63.0%;
+    top: 37.5%;
+}
+
+@keyframes petFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-7px) rotate(1deg); }
 }
 
 .player-info {
@@ -1280,6 +1378,16 @@ body::before {
         gap: 6px 10px;
         background: rgba(18, 18, 31, 0.95);
     }
+    .web-pet {
+        right: 4px;
+        bottom: 118px;
+        width: 132px;
+    }
+    .web-pet-close {
+        opacity: 0.8;
+        width: 24px;
+        height: 24px;
+    }
     .player-info {
         flex: 1;
         min-width: 0;
@@ -1490,6 +1598,10 @@ body::before {
 }
 .time-input-group label {
     font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 /* ============================================
    登录 / 注册界面
@@ -1688,10 +1800,6 @@ body::before {
     padding: 6px 12px;
     font-size: 0.8rem;
     margin-right: 8px;
-}
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 .time-input-group input {
     width: 80px;

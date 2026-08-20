@@ -258,6 +258,14 @@ const MusicData = {
     _songs: [],
 
     async loadDefaultLibrary() {
+        // 优先恢复本地曲库。上传、删除、重命名等操作都会保存完整曲库快照。
+        // 这样刷新页面后不会被 HTML 内嵌的初始数据覆盖。
+        if (this._loadFromLocal()) {
+            console.log(`从本地恢复了 ${this._songs.length} 首歌曲`);
+            this._preloadAudioFiles();
+            return true;
+        }
+
         // 1. 尝试从内嵌数据加载（file:// 兼容）
         try {
             const el = document.getElementById('preset-songs');

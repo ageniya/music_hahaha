@@ -433,6 +433,71 @@ const FloatingNotes = {
     },
 };
 
+// ==================== 网页宠物 ====================
+
+const WebPet = {
+    _dragging: false,
+    _offsetX: 0,
+    _offsetY: 0,
+
+    start() {
+        const pet = document.getElementById('webPet');
+        if (!pet) return;
+
+        const closeButton = document.getElementById('webPetClose');
+        if (closeButton) {
+            closeButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                pet.style.display = 'none';
+            });
+        }
+
+        pet.addEventListener('pointerdown', (event) => {
+            if (event.target.closest('.web-pet-close')) return;
+            const rect = pet.getBoundingClientRect();
+            this._dragging = true;
+            this._offsetX = event.clientX - rect.left;
+            this._offsetY = event.clientY - rect.top;
+            pet.classList.add('dragging');
+            pet.setPointerCapture(event.pointerId);
+        });
+
+        pet.addEventListener('pointermove', (event) => {
+            if (!this._dragging) return;
+            const maxLeft = Math.max(0, window.innerWidth - pet.offsetWidth);
+            const maxTop = Math.max(0, window.innerHeight - pet.offsetHeight);
+            const left = Math.max(0, Math.min(maxLeft, event.clientX - this._offsetX));
+            const top = Math.max(0, Math.min(maxTop, event.clientY - this._offsetY));
+            pet.style.left = `${left}px`;
+            pet.style.top = `${top}px`;
+            pet.style.right = 'auto';
+            pet.style.bottom = 'auto';
+        });
+
+        const stopDragging = (event) => {
+            if (!this._dragging) return;
+            this._dragging = false;
+            pet.classList.remove('dragging');
+            if (event && pet.hasPointerCapture(event.pointerId)) {
+                pet.releasePointerCapture(event.pointerId);
+            }
+        };
+        pet.addEventListener('pointerup', stopDragging);
+        pet.addEventListener('pointercancel', stopDragging);
+
+        window.addEventListener('pointermove', (event) => {
+            if (this._dragging) return;
+            const rect = pet.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height * 0.36;
+            const x = Math.max(-5, Math.min(5, (event.clientX - centerX) / 90));
+            const y = Math.max(-4, Math.min(4, (event.clientY - centerY) / 90));
+            pet.style.setProperty('--look-x', `${x}px`);
+            pet.style.setProperty('--look-y', `${y}px`);
+        }, { passive: true });
+    },
+};
+
 // ==================== 背景粒子动画 ====================
 
 const ParticleBg = {
@@ -519,6 +584,87 @@ const ParticleBg = {
 
 // ==================== 主应用 ====================
 
+/**
+ * 无依赖 ZIP 回退实现。
+ * 使用 ZIP 的“存储”模式，不压缩音频，避免离线导出依赖 CDN。
+ */
+class LocalZip {
+    constructor() { this.files = []; }
+
+    file(name, content) {
+        const data = content instanceof ArrayBuffer
+            ? new Uint8Array(content)
+            : content instanceof Uint8Array
+                ? content
+                : new TextEncoder().encode(String(content));
+        this.files.push({ name, data });
+        return this;
+    }
+
+    async generateAsync() {
+        const encoder = new TextEncoder();
+        const localParts = [];
+        const centralParts = [];
+        let offset = 0;
+
+        for (const file of this.files) {
+            const name = encoder.encode(file.name);
+            const crc = LocalZip._crc32(file.data);
+            const local = new Uint8Array(30 + name.length + file.data.length);
+            const view = new DataView(local.buffer);
+            view.setUint32(0, 0x04034b50, true);
+            view.setUint16(4, 20, true);
+            view.setUint16(6, 0x800, true); // UTF-8 filename
+            view.setUint16(8, 0, true); // stored, no compression
+            view.setUint32(14, crc, true);
+            view.setUint32(18, file.data.length, true);
+            view.setUint32(22, file.data.length, true);
+            view.setUint16(26, name.length, true);
+            local.set(name, 30);
+            local.set(file.data, 30 + name.length);
+            localParts.push(local);
+
+            const central = new Uint8Array(46 + name.length);
+            const centralView = new DataView(central.buffer);
+            centralView.setUint32(0, 0x02014b50, true);
+            centralView.setUint16(4, 20, true);
+            centralView.setUint16(6, 20, true);
+            centralView.setUint16(8, 0x800, true);
+            centralView.setUint16(10, 0, true);
+            centralView.setUint32(16, crc, true);
+            centralView.setUint32(20, file.data.length, true);
+            centralView.setUint32(24, file.data.length, true);
+            centralView.setUint16(28, name.length, true);
+            centralView.setUint32(42, offset, true);
+            central.set(name, 46);
+            centralParts.push(central);
+            offset += local.length;
+        }
+
+        const centralOffset = offset;
+        const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+        const end = new Uint8Array(22);
+        const endView = new DataView(end.buffer);
+        endView.setUint32(0, 0x06054b50, true);
+        endView.setUint16(8, this.files.length, true);
+        endView.setUint16(10, this.files.length, true);
+        endView.setUint32(12, centralSize, true);
+        endView.setUint32(16, centralOffset, true);
+        return new Blob([...localParts, ...centralParts, end], { type: 'application/zip' });
+    }
+
+    static _crc32(data) {
+        let crc = 0xffffffff;
+        for (const byte of data) {
+            crc ^= byte;
+            for (let i = 0; i < 8; i++) {
+                crc = (crc >>> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+            }
+        }
+        return (crc ^ 0xffffffff) >>> 0;
+    }
+}
+
 const App = {
     // 当前编辑上下文（workspace 中的哪个 item）
     _editingWsItem: null,
@@ -542,6 +688,8 @@ const App = {
         ParticleBg.start();
         // 启动随机浮动音符
         FloatingNotes.start();
+        // 启动网页宠物的视线跟随
+        WebPet.start();
 
         // 从 IndexedDB 恢复音频文件
         const restored = await FileStorage.restoreFromDB();
@@ -688,20 +836,28 @@ const App = {
             return;
         }
 
-        // 按 audioUrl 路径构建文件夹树
+        // 搜索时只按歌曲名称匹配，并将结果按名称排序展示。
+        // 不搜索歌手、环节、备注等字段，避免曲库较小时产生不必要的区分。
         const tree = {};
-        for (const song of allSongs) {
-            if (query && !song.title.toLowerCase().includes(query)) continue;
-            let path = (song.audioUrl || '').replace(/^.*?data\/audio2?\//, '');
-            const parts = path.split('/');
-            const parent = parts[0] || '其他';
-            const child = parts.length > 2 ? parts[1] : null;
-            if (!tree[parent]) tree[parent] = { subs: {}, songs: [] };
-            if (child) {
-                if (!tree[parent].subs[child]) tree[parent].subs[child] = [];
-                tree[parent].subs[child].push(song);
-            } else {
-                tree[parent].songs.push(song);
+        if (query) {
+            const results = allSongs
+                .filter(song => String(song.title || '').toLowerCase().includes(query))
+                .sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
+            tree['搜索结果'] = { subs: {}, songs: results };
+        } else {
+            // 未搜索时按 audioUrl 路径构建文件夹树
+            for (const song of allSongs) {
+                let path = (song.audioUrl || '').replace(/^.*?data\/audio2?\//, '');
+                const parts = path.split('/');
+                const parent = parts[0] || '其他';
+                const child = parts.length > 2 ? parts[1] : null;
+                if (!tree[parent]) tree[parent] = { subs: {}, songs: [] };
+                if (child) {
+                    if (!tree[parent].subs[child]) tree[parent].subs[child] = [];
+                    tree[parent].subs[child].push(song);
+                } else {
+                    tree[parent].songs.push(song);
+                }
             }
         }
 
@@ -769,11 +925,13 @@ const App = {
             } else {
                 card.addEventListener('dblclick', () => this._playLibrarySong(songId));
             }
-            card.querySelector('[data-action="add"]')?.addEventListener('click', (e) => {
+            const addButton = card.querySelector('[data-action="add"]');
+            if (addButton) addButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this._addToWorkspace(songId);
             });
-            card.querySelector('[data-action="delete"]')?.addEventListener('click', (e) => {
+            const deleteButton = card.querySelector('[data-action="delete"]');
+            if (deleteButton) deleteButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this._deleteFromLibrary(songId);
             });
@@ -865,9 +1023,12 @@ const App = {
             } else {
                 card.addEventListener('dblclick', () => this._playWorkspaceSong(wsId));
             }
-            card.querySelector('[data-action="edit-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._openEditorForWs(wsId); });
-            card.querySelector('[data-action="rename-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._renameWsItem(wsId); });
-            card.querySelector('[data-action="remove-ws"]')?.addEventListener('click', (e) => { e.stopPropagation(); this._removeFromWorkspace(wsId); });
+            const editButton = card.querySelector('[data-action="edit-ws"]');
+            if (editButton) editButton.addEventListener('click', (e) => { e.stopPropagation(); this._openEditorForWs(wsId); });
+            const renameButton = card.querySelector('[data-action="rename-ws"]');
+            if (renameButton) renameButton.addEventListener('click', (e) => { e.stopPropagation(); this._renameWsItem(wsId); });
+            const removeButton = card.querySelector('[data-action="remove-ws"]');
+            if (removeButton) removeButton.addEventListener('click', (e) => { e.stopPropagation(); this._removeFromWorkspace(wsId); });
             card.addEventListener('dragstart', (e) => this._onDragStart(e));
             card.addEventListener('dragover', (e) => this._onDragOver(e));
             card.addEventListener('dragleave', (e) => this._onDragLeave(e));
@@ -1070,7 +1231,18 @@ const App = {
 
     async _exportZip() {
         if (Workspace.count === 0) { this._toast('工作区为空', 'error'); return; }
-        if (typeof JSZip === 'undefined') { this._toast('加载 ZIP 组件...', ''); await this._loadJSZip(); }
+        let ZipClass = typeof JSZip !== 'undefined' ? JSZip : null;
+        if (!ZipClass) {
+            this._toast('正在加载 ZIP 组件...', '');
+            try {
+                await this._loadJSZip();
+                ZipClass = typeof JSZip !== 'undefined' ? JSZip : null;
+            } catch (e) {
+                // 离线时使用内置的无压缩 ZIP 写入器，不影响导出功能。
+                ZipClass = LocalZip;
+            }
+            if (!ZipClass) ZipClass = LocalZip;
+        }
 
         const name = document.getElementById('playlistName').value.trim() || '婚礼歌单';
         const items = Workspace.getAll();
@@ -1088,7 +1260,7 @@ const App = {
             return;
         }
 
-        const zip = new JSZip();
+        const zip = new ZipClass();
         let fileCount = 0;
 
         for (let i = 0; i < items.length; i++) {
@@ -1162,14 +1334,17 @@ const App = {
     _onDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        e.target.closest('.ws-card')?.classList.add('drag-over');
+        const targetCard = e.target.closest('.ws-card');
+        if (targetCard) targetCard.classList.add('drag-over');
     },
     _onDragLeave(e) {
-        e.target.closest('.ws-card')?.classList.remove('drag-over');
+        const targetCard = e.target.closest('.ws-card');
+        if (targetCard) targetCard.classList.remove('drag-over');
     },
     _onDrop(e) {
         e.preventDefault();
-        e.target.closest('.ws-card')?.classList.remove('drag-over');
+        const targetCard = e.target.closest('.ws-card');
+        if (targetCard) targetCard.classList.remove('drag-over');
         const fromId = e.dataTransfer.getData('text/plain');
         const toCard = e.target.closest('.ws-card');
         if (!toCard || !fromId || fromId === toCard.dataset.wsId) return;
@@ -1207,7 +1382,8 @@ const App = {
         if (!song) return;
         this._ensureAudio(song, () => {
             // 播放列表 = 当前搜索范围内所有有音频的歌（不再依赖已删除的筛选下拉框）
-            const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+            const searchInput = document.getElementById('searchInput');
+            const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
             const allSongs = MusicData.getAllSongs().filter(s => {
                 if (query && !s.title.toLowerCase().includes(query)) return false;
                 return FileStorage.has(s.id) || s.audioUrl;
