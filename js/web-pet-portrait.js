@@ -7,6 +7,26 @@
     let offsetX = 0;
     let offsetY = 0;
 
+    const blink = () => {
+        pet.classList.add('blinking');
+        window.setTimeout(() => pet.classList.remove('blinking'), 130);
+        window.setTimeout(blink, 2600 + Math.random() * 3400);
+    };
+
+    const think = () => {
+        if (!dragging) {
+            pet.classList.remove('thinking');
+            // 重新添加类，保证每次都能从头播放动画。
+            void pet.offsetWidth;
+            pet.classList.add('thinking');
+            window.setTimeout(() => pet.classList.remove('thinking'), 2450);
+        }
+        window.setTimeout(think, 10000 + Math.random() * 10000);
+    };
+
+    window.setTimeout(blink, 1400 + Math.random() * 1500);
+    window.setTimeout(think, 5000 + Math.random() * 3000);
+
     window.addEventListener('pointermove', (event) => {
         if (dragging) return;
         const rect = pet.getBoundingClientRect();
