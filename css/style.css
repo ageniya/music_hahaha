@@ -1005,8 +1005,8 @@ body::before {
     position: absolute;
     top: 20.8%;
     z-index: 1;
-    width: 10px;
-    height: 6px;
+    width: 7px;
+    height: 3.5px;
     border-radius: 50% 50% 45% 45%;
     background: linear-gradient(180deg, #ffc6ab 0%, #f3ae90 78%, #c97b64 100%);
     box-shadow: 0 1px 0 rgba(115, 57, 43, 0.45);
@@ -1017,8 +1017,8 @@ body::before {
     transition: transform 0.08s ease-out, opacity 0.05s ease-out;
 }
 
-.web-pet-lid-left { left: 40.5%; }
-.web-pet-lid-right { left: 53.2%; }
+.web-pet-lid-left { left: 42%; }
+.web-pet-lid-right { left: 54.7%; }
 
 .web-pet-portrait.blinking .web-pet-lid {
     opacity: 0.94;
