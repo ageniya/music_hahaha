@@ -1003,7 +1003,6 @@ body::before {
 
 .web-pet-lid {
     position: absolute;
-    top: 20.8%;
     z-index: 1;
     width: 7px;
     height: 3.5px;
@@ -1017,8 +1016,15 @@ body::before {
     transition: transform 0.08s ease-out, opacity 0.05s ease-out;
 }
 
-.web-pet-lid-left { left: 42%; }
-.web-pet-lid-right { left: 54.7%; }
+.web-pet-lid-left {
+    top: 21.8%;
+    left: 42%;
+}
+
+.web-pet-lid-right {
+    top: 20%;
+    left: 54.7%;
+}
 
 .web-pet-portrait.blinking .web-pet-lid {
     opacity: 0.94;
