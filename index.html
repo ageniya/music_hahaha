@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
-    <link rel="stylesheet" href="css/style.css?v=20260820g">
+    <link rel="stylesheet" href="css/style.css?v=20260820h">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -132,11 +132,15 @@
         </div>
     </div>
 
-    <!-- 网页宠物：真实 WebGL 3D 人物 -->
-    <div class="web-pet-3d" id="webPet3d" aria-label="3D 网页宠物">
-        <button class="web-pet-3d-close" id="webPet3dClose" type="button" aria-label="关闭网页宠物" title="关闭">×</button>
-        <canvas id="webPet3dCanvas" aria-label="可互动 3D 网页宠物"></canvas>
-        <span class="web-pet-3d-hint">拖动我</span>
+    <!-- 网页宠物：精致 2.5D 角色渲染 -->
+    <div class="web-pet-portrait" id="webPetPortrait" aria-label="网页宠物">
+        <button class="web-pet-portrait-close" id="webPetPortraitClose" type="button" aria-label="关闭网页宠物" title="关闭">×</button>
+        <div class="web-pet-portrait-stage">
+            <img src="images/web-pet-portrait-v1.png" alt="婚礼音乐库网页宠物">
+            <span class="web-pet-glint web-pet-glint-left"></span>
+            <span class="web-pet-glint web-pet-glint-right"></span>
+        </div>
+        <span class="web-pet-portrait-hint">拖动我</span>
     </div>
 
     <!-- 提示消息 -->
@@ -203,7 +207,7 @@
     </div>
     <script src="js/data.js?v=2"></script>
     <script src="js/app.js?v=2"></script>
-    <script type="module" src="js/web-pet-3d.js?v=2"></script>
+    <script src="js/web-pet-portrait.js?v=1"></script>
 
     <!-- 预设音乐库数据（内嵌，无需服务器） -->
     <script id="preset-songs" type="application/json">[
