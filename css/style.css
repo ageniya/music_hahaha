@@ -1003,9 +1003,9 @@ body::before {
 
 .web-pet-lid {
     position: absolute;
-    top: 56.5%;
-    width: 17px;
-    height: 10px;
+    top: 21.3%;
+    width: 11px;
+    height: 5px;
     border-radius: 50% 50% 45% 45%;
     background: linear-gradient(180deg, #ffc6ab 0%, #f3ae90 78%, #c97b64 100%);
     box-shadow: 0 1px 0 rgba(115, 57, 43, 0.45);
@@ -1015,33 +1015,13 @@ body::before {
     pointer-events: none;
 }
 
-.web-pet-lid-left { left: 41.5%; }
-.web-pet-lid-right { left: 62%; }
+.web-pet-lid-left { left: 42.5%; }
+.web-pet-lid-right { left: 57.2%; }
 
 .web-pet-portrait.blinking .web-pet-lid {
     opacity: 0.94;
     transform: translateY(-50%) scaleY(1);
     transition: transform 0.07s ease-in, opacity 0.04s;
-}
-
-.web-pet-thought {
-    position: absolute;
-    top: 19%;
-    right: -9px;
-    z-index: 2;
-    font-size: 15px;
-    line-height: 1;
-    opacity: 0;
-    transform: translateY(4px) scale(0.7);
-    pointer-events: none;
-}
-
-.web-pet-portrait.thinking .web-pet-thought {
-    animation: petThought 2.4s ease-out both;
-}
-
-.web-pet-portrait.thinking .web-pet-portrait-stage {
-    animation: portraitThink 1s ease-in-out 2;
 }
 
 .web-pet-portrait-close {
@@ -1092,21 +1072,8 @@ body::before {
     50% { transform: translate3d(var(--look-x), calc(var(--look-y) - 2px), 0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.025); }
 }
 
-@keyframes portraitThink {
-    0%, 100% { transform: translate3d(var(--look-x), var(--look-y), 0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1); }
-    35% { transform: translate3d(calc(var(--look-x) + 1px), calc(var(--look-y) - 2px), 0) rotateX(var(--tilt-x)) rotateY(calc(var(--tilt-y) + 4deg)) scale(1.015); }
-    70% { transform: translate3d(calc(var(--look-x) - 1px), var(--look-y), 0) rotateX(var(--tilt-x)) rotateY(calc(var(--tilt-y) - 3deg)) scale(1.01); }
-}
-
-@keyframes petThought {
-    0%, 100% { opacity: 0; transform: translateY(4px) scale(0.7); }
-    18%, 75% { opacity: 0.9; transform: translateY(-5px) scale(1); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .web-pet-portrait-stage,
-    .web-pet-portrait.thinking .web-pet-portrait-stage,
-    .web-pet-portrait.thinking .web-pet-thought {
+    .web-pet-portrait-stage {
         animation: none;
     }
 }
