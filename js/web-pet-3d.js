@@ -22,7 +22,7 @@ if (container && canvas) {
     root.add(body, headPivot);
     scene.add(root);
 
-    const skin = new THREE.MeshStandardMaterial({ color: 0xf0b38d, roughness: 0.58 });
+    const skin = new THREE.MeshStandardMaterial({ color: 0xe5ad89, roughness: 0.62 });
     const hair = new THREE.MeshStandardMaterial({ color: 0x130f17, roughness: 0.4, metalness: 0.08 });
     const suit = new THREE.MeshStandardMaterial({ color: 0x10152b, roughness: 0.42, metalness: 0.05 });
     const lapel = new THREE.MeshStandardMaterial({ color: 0x05060d, roughness: 0.25, metalness: 0.12 });
@@ -72,35 +72,36 @@ if (container && canvas) {
 
     // 脖子、头部和耳朵
     addMesh(new THREE.CylinderGeometry(0.28, 0.32, 0.42, 18), skin, new THREE.Vector3(0, 0.22, 0), null, headPivot);
-    addMesh(new THREE.SphereGeometry(1.18, 36, 28), skin, new THREE.Vector3(0, 1.47, 0.05), new THREE.Vector3(0.95, 1.06, 0.88), headPivot);
+    // 偏窄椭圆脸，避免落入通用圆脸 Q 版造型。
+    addMesh(new THREE.SphereGeometry(1.18, 36, 28), skin, new THREE.Vector3(0, 1.47, 0.05), new THREE.Vector3(0.86, 1.04, 0.82), headPivot);
     addMesh(new THREE.SphereGeometry(0.23, 18, 14), skin, new THREE.Vector3(-1.08, 1.42, 0.02), new THREE.Vector3(0.65, 1, 0.55), headPivot);
     addMesh(new THREE.SphereGeometry(0.23, 18, 14), skin, new THREE.Vector3(1.08, 1.42, 0.02), new THREE.Vector3(0.65, 1, 0.55), headPivot);
 
     // 后梳蓬松发型：发顶底座 + 多个发束
-    addMesh(new THREE.SphereGeometry(1.18, 32, 24), hair, new THREE.Vector3(0, 1.93, -0.08), new THREE.Vector3(0.99, 0.72, 0.9), headPivot);
+    addMesh(new THREE.SphereGeometry(1.18, 32, 24), hair, new THREE.Vector3(0, 1.96, -0.08), new THREE.Vector3(0.91, 0.62, 0.84), headPivot);
     for (let i = 0; i < 9; i++) {
         const angle = -1.05 + i * 0.27;
-        const strand = addMesh(new THREE.CapsuleGeometry(0.13, 0.54, 5, 10), hair, new THREE.Vector3(Math.sin(angle) * 0.72, 2.32 + Math.cos(angle) * 0.08, 0.72), null, headPivot);
+        const strand = addMesh(new THREE.CapsuleGeometry(0.1, 0.47, 5, 10), hair, new THREE.Vector3(Math.sin(angle) * 0.64, 2.28 + Math.cos(angle) * 0.08, 0.69), null, headPivot);
         strand.rotation.z = angle * 0.6;
         strand.rotation.x = Math.PI / 2.8;
     }
 
     const makeEye = (x) => {
         const eye = new THREE.Group();
-        eye.position.set(x, 1.57, 0.94);
-        addMesh(new THREE.SphereGeometry(0.27, 20, 16), white, new THREE.Vector3(), new THREE.Vector3(1.08, 0.75, 0.35), eye);
-        const pupil = addMesh(new THREE.SphereGeometry(0.12, 18, 14), iris, new THREE.Vector3(0, 0, 0.22), new THREE.Vector3(1, 1.1, 0.4), eye);
-        addMesh(new THREE.SphereGeometry(0.035, 12, 10), white, new THREE.Vector3(-0.035, 0.045, 0.3), null, eye);
+        eye.position.set(x, 1.58, 0.86);
+        addMesh(new THREE.SphereGeometry(0.19, 20, 16), white, new THREE.Vector3(), new THREE.Vector3(1.15, 0.64, 0.24), eye);
+        const pupil = addMesh(new THREE.SphereGeometry(0.075, 18, 14), iris, new THREE.Vector3(0, 0, 0.13), new THREE.Vector3(1, 1.08, 0.28), eye);
+        addMesh(new THREE.SphereGeometry(0.022, 12, 10), white, new THREE.Vector3(-0.02, 0.025, 0.19), null, eye);
         eyes.add(eye);
         return { eye, pupil };
     };
-    const leftEye = makeEye(-0.42);
-    const rightEye = makeEye(0.42);
+    const leftEye = makeEye(-0.36);
+    const rightEye = makeEye(0.36);
     headPivot.add(eyes);
 
-    const leftBrow = addMesh(new THREE.CapsuleGeometry(0.045, 0.42, 4, 8), brow, new THREE.Vector3(-0.43, 1.91, 0.93), null, headPivot);
+    const leftBrow = addMesh(new THREE.CapsuleGeometry(0.035, 0.34, 4, 8), brow, new THREE.Vector3(-0.37, 1.87, 0.88), null, headPivot);
     leftBrow.rotation.z = -1.35;
-    const rightBrow = addMesh(new THREE.CapsuleGeometry(0.045, 0.42, 4, 8), brow, new THREE.Vector3(0.43, 1.91, 0.93), null, headPivot);
+    const rightBrow = addMesh(new THREE.CapsuleGeometry(0.035, 0.34, 4, 8), brow, new THREE.Vector3(0.37, 1.87, 0.88), null, headPivot);
     rightBrow.rotation.z = 1.35;
     addMesh(new THREE.SphereGeometry(0.14, 16, 12), skin, new THREE.Vector3(0, 1.37, 1.02), new THREE.Vector3(0.7, 1.1, 0.55), headPivot);
     addMesh(new THREE.CapsuleGeometry(0.035, 0.34, 4, 8), brow, new THREE.Vector3(0, 0.93, 0.99), new THREE.Vector3(1.4, 0.55, 0.35), headPivot).rotation.z = Math.PI / 2;
@@ -176,11 +177,13 @@ if (container && canvas) {
         const elapsed = clock.getElapsedTime();
         current.lerp(target, 0.075);
         headPivot.rotation.y = current.x * 0.42;
-        headPivot.rotation.x = -current.y * 0.16;
-        eyes.position.x = current.x * 0.05;
-        eyes.position.y = -current.y * 0.035;
+        // 屏幕坐标 Y 向下，头部和瞳孔按相同视觉方向移动。
+        headPivot.rotation.x = current.y * 0.12;
+        eyes.position.set(0, 0, 0);
         leftEye.pupil.position.x = current.x * 0.045;
+        leftEye.pupil.position.y = -current.y * 0.04;
         rightEye.pupil.position.x = current.x * 0.045;
+        rightEye.pupil.position.y = -current.y * 0.04;
         root.position.y = Math.sin(elapsed * 1.8) * 0.055;
         body.rotation.z = Math.sin(elapsed * 1.1) * 0.025;
         rightArm.rotation.z = -0.55 + Math.sin(elapsed * 1.6) * 0.06;

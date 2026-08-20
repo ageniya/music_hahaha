@@ -893,8 +893,8 @@ body::before {
     position: fixed;
     right: 18px;
     bottom: 64px;
-    width: 270px;
-    height: 360px;
+    width: 90px;
+    height: 120px;
     z-index: 80;
     cursor: grab;
     touch-action: none;
@@ -914,16 +914,16 @@ body::before {
 
 .web-pet-3d-close {
     position: absolute;
-    top: 12px;
-    right: 10px;
+    top: 2px;
+    right: 1px;
     z-index: 2;
-    width: 28px;
-    height: 28px;
+    width: 18px;
+    height: 18px;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 50%;
     background: rgba(8, 8, 15, 0.72);
     color: rgba(255, 255, 255, 0.85);
-    font-size: 1.1rem;
+    font-size: 0.85rem;
     line-height: 1;
     cursor: pointer;
     opacity: 0;
@@ -942,9 +942,9 @@ body::before {
 .web-pet-3d-hint {
     position: absolute;
     left: 50%;
-    bottom: 4px;
-    transform: translateX(-50%);
-    padding: 4px 9px;
+    bottom: -12px;
+    transform: translateX(-50%) scale(0.72);
+    padding: 3px 7px;
     border-radius: 99px;
     background: rgba(8, 8, 15, 0.54);
     color: rgba(255, 255, 255, 0.58);
@@ -1462,15 +1462,15 @@ body::before {
     .web-pet-3d {
         right: 0;
         bottom: 108px;
-        width: 185px;
-        height: 250px;
+        width: 80px;
+        height: 108px;
     }
     .web-pet-3d-close {
         opacity: 0.85;
-        top: 6px;
-        right: 5px;
-        width: 25px;
-        height: 25px;
+        top: 1px;
+        right: 0;
+        width: 17px;
+        height: 17px;
     }
     .player-info {
         flex: 1;
