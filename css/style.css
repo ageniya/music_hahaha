@@ -1003,9 +1003,10 @@ body::before {
 
 .web-pet-lid {
     position: absolute;
-    top: 21.3%;
-    width: 11px;
-    height: 5px;
+    top: 20.8%;
+    z-index: 1;
+    width: 10px;
+    height: 6px;
     border-radius: 50% 50% 45% 45%;
     background: linear-gradient(180deg, #ffc6ab 0%, #f3ae90 78%, #c97b64 100%);
     box-shadow: 0 1px 0 rgba(115, 57, 43, 0.45);
@@ -1013,15 +1014,16 @@ body::before {
     transform-origin: center;
     opacity: 0;
     pointer-events: none;
+    transition: transform 0.08s ease-out, opacity 0.05s ease-out;
 }
 
-.web-pet-lid-left { left: 42.5%; }
-.web-pet-lid-right { left: 57.2%; }
+.web-pet-lid-left { left: 40.5%; }
+.web-pet-lid-right { left: 53.2%; }
 
 .web-pet-portrait.blinking .web-pet-lid {
     opacity: 0.94;
     transform: translateY(-50%) scaleY(1);
-    transition: transform 0.07s ease-in, opacity 0.04s;
+    transition-timing-function: ease-in;
 }
 
 .web-pet-portrait-close {

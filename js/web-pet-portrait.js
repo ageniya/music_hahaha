@@ -9,7 +9,7 @@
 
     const blink = () => {
         pet.classList.add('blinking');
-        window.setTimeout(() => pet.classList.remove('blinking'), 130);
+        window.setTimeout(() => pet.classList.remove('blinking'), 210);
         window.setTimeout(blink, 2600 + Math.random() * 3400);
     };
 
