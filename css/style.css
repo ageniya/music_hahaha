@@ -963,8 +963,6 @@ body::before {
 .web-pet-portrait {
     --look-x: 0px;
     --look-y: 0px;
-    --pupil-x: 0px;
-    --pupil-y: 0px;
     --tilt-x: 0deg;
     --tilt-y: 0deg;
     position: fixed;
@@ -1003,39 +1001,14 @@ body::before {
     object-position: center bottom;
 }
 
-.web-pet-pupil {
-    position: absolute;
-    top: 50%;
-    width: 5px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(44, 24, 14, 0.42);
-    box-shadow: 0 0 0 0.5px rgba(31, 15, 9, 0.18);
-    transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y)));
-    transition: transform 0.1s ease-out;
-    pointer-events: none;
-}
-
-.web-pet-pupil i {
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    width: 1.5px;
-    height: 1.5px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.65);
-}
-
-.web-pet-pupil-left { left: 48%; }
-.web-pet-pupil-right { left: 68.5%; }
-
 .web-pet-lid {
     position: absolute;
-    top: 47.6%;
-    width: 15px;
-    height: 8px;
-    border-radius: 50%;
-    background: linear-gradient(180deg, #f6b79b, #efaa8d);
+    top: 56.5%;
+    width: 17px;
+    height: 10px;
+    border-radius: 50% 50% 45% 45%;
+    background: linear-gradient(180deg, #ffc6ab 0%, #f3ae90 78%, #c97b64 100%);
+    box-shadow: 0 1px 0 rgba(115, 57, 43, 0.45);
     transform: translateY(-50%) scaleY(0);
     transform-origin: center;
     opacity: 0;
@@ -1049,11 +1022,6 @@ body::before {
     opacity: 0.94;
     transform: translateY(-50%) scaleY(1);
     transition: transform 0.07s ease-in, opacity 0.04s;
-}
-
-.web-pet-portrait.blinking .web-pet-pupil {
-    opacity: 0;
-    transition: opacity 0.05s;
 }
 
 .web-pet-thought {
