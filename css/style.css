@@ -5,12 +5,12 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #08080f;
-    --bg-secondary: #12121f;
-    --bg-tertiary: #0d0d1a;
-    --bg-card: #16162a;
-    --bg-card-hover: #1c1c38;
-    --bg-input: #0c0c1c;
+    --bg-primary: #0a0910;
+    --bg-secondary: #12101a;
+    --bg-tertiary: #0e0b14;
+    --bg-card: #181421;
+    --bg-card-hover: #211a2d;
+    --bg-input: #0e0b15;
     --text-primary: #ececf2;
     --text-secondary: #a8a8c0;
     --text-muted: #5e5e78;
@@ -50,9 +50,10 @@ html {
 body {
     font-family: var(--font);
     background:
-        radial-gradient(ellipse 80% 60% at 15% 5%, rgba(124, 92, 252, 0.06) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 80% at 85% 90%, rgba(52, 211, 153, 0.04) 0%, transparent 55%),
-        var(--bg-primary);
+        radial-gradient(ellipse 68% 62% at 104% -8%, rgba(220, 183, 112, 0.1) 0%, transparent 62%),
+        radial-gradient(ellipse 65% 78% at -8% 108%, rgba(93, 61, 134, 0.15) 0%, transparent 63%),
+        radial-gradient(ellipse 46% 48% at 52% 42%, rgba(112, 79, 148, 0.045) 0%, transparent 72%),
+        linear-gradient(135deg, #0b0910 0%, #100b16 48%, #080a10 100%);
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -61,21 +62,22 @@ body {
     overflow: hidden;
 }
 
-/* 背景微动光晕 */
+/* 背景微动光晕：深紫与暖金，保持低对比度以突出内容 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(124, 92, 252, 0.03) 0%, transparent 70%);
-    animation: bgPulse 8s ease-in-out infinite;
+        radial-gradient(ellipse 45% 35% at 72% 20%, rgba(242, 204, 139, 0.055) 0%, transparent 72%),
+        radial-gradient(ellipse 40% 46% at 24% 76%, rgba(139, 92, 180, 0.05) 0%, transparent 72%);
+    animation: bgPulse 14s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
 }
 
 @keyframes bgPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+    0%, 100% { opacity: 0.42; transform: scale(1); }
+    50% { opacity: 0.78; transform: scale(1.035); }
 }
 
 /* --- 滚动条 --- */
@@ -265,12 +267,12 @@ body::before {
     50% { opacity: 1; left: 5px; right: 5px; }
 }
 
-/* 浮动音符群 — 浮在界面上方 */
+/* 旧版漂浮音符容器：保留结构，但不再生成高干扰 emoji 元素 */
 .floating-notes {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 50;
+    z-index: 0;
 }
 
 .note-dynamic {

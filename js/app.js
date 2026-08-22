@@ -395,6 +395,7 @@ const FloatingNotes = {
     _timer: null,
 
     start() {
+        if (this._timer) return;
         this._container = document.querySelector('.floating-notes');
         if (!this._container) return;
         this._container.innerHTML = '';
@@ -507,6 +508,10 @@ const ParticleBg = {
     _animId: null,
 
     start() {
+        // 页面热更新或重复初始化时，避免叠加多个 canvas 和粒子群。
+        if (this._animId) return;
+        const existingCanvas = document.getElementById('particleCanvas');
+        if (existingCanvas) existingCanvas.remove();
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'particleCanvas';
         Object.assign(this._canvas.style, {
@@ -518,20 +523,21 @@ const ParticleBg = {
         this._resize();
         window.addEventListener('resize', () => this._resize());
 
-        // 大量光点
-        const count = 80;
+        // 少量低亮度微粒，作为氛围而非视觉主体。
+        this._particles = [];
+        const count = window.innerWidth < 768 ? 12 : 26;
         for (let i = 0; i < count; i++) {
-            const isGreen = Math.random() > 0.75;
+            const isGold = Math.random() > 0.38;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
                 y: Math.random() * this._canvas.height,
-                r: Math.random() * 2.5 + 1,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5 - 0.25,
-                alpha: Math.random() * 0.7 + 0.3,
+                r: Math.random() * 1.1 + 0.45,
+                vx: (Math.random() - 0.5) * 0.12,
+                vy: (Math.random() - 0.5) * 0.12 - 0.04,
+                alpha: Math.random() * 0.2 + 0.08,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: Math.random() * 0.04 + 0.015,
-                color: isGreen ? '52, 211, 153' : '124, 92, 252',
+                pulseSpeed: Math.random() * 0.009 + 0.004,
+                color: isGold ? '226, 190, 126' : '143, 108, 183',
             });
         }
         this._animate();
@@ -558,25 +564,24 @@ const ParticleBg = {
             if (p.y < -20) p.y = H + 20;
             if (p.y > H + 20) p.y = -20;
 
-            // 呼吸灯：alpha 在 0.2~0.9 之间正弦波动
-            const breathe = 0.35 + Math.sin(p.pulse) * 0.35;
-            const alpha = p.alpha * (0.5 + breathe);
+            const breathe = 0.75 + Math.sin(p.pulse) * 0.22;
+            const alpha = p.alpha * breathe;
 
             // 外层大光晕
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 9);
             glow.addColorStop(0, `rgba(${p.color}, ${Math.min(1, alpha)})`);
-            glow.addColorStop(0.3, `rgba(${p.color}, ${Math.min(0.8, alpha * 0.6)})`);
-            glow.addColorStop(0.6, `rgba(${p.color}, ${Math.min(0.3, alpha * 0.2)})`);
+            glow.addColorStop(0.35, `rgba(${p.color}, ${alpha * 0.32})`);
+            glow.addColorStop(0.7, `rgba(${p.color}, ${alpha * 0.08})`);
             glow.addColorStop(1, `rgba(${p.color}, 0)`);
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, p.r * 9, 0, Math.PI * 2);
             ctx.fillStyle = glow;
             ctx.fill();
 
             // 核心亮点
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.7, alpha * 0.9)})`;
+            ctx.fillStyle = `rgba(255, 248, 235, ${Math.min(0.42, alpha * 1.4)})`;
             ctx.fill();
         }
     },
@@ -686,8 +691,6 @@ const App = {
 
         // 启动背景粒子动画
         ParticleBg.start();
-        // 启动随机浮动音符
-        FloatingNotes.start();
         // 启动网页宠物的视线跟随
         WebPet.start();
 
