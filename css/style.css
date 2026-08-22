@@ -50,10 +50,10 @@ html {
 body {
     font-family: var(--font);
     background:
-        radial-gradient(ellipse 68% 62% at 104% -8%, rgba(220, 183, 112, 0.1) 0%, transparent 62%),
-        radial-gradient(ellipse 65% 78% at -8% 108%, rgba(93, 61, 134, 0.15) 0%, transparent 63%),
-        radial-gradient(ellipse 46% 48% at 52% 42%, rgba(112, 79, 148, 0.045) 0%, transparent 72%),
-        linear-gradient(135deg, #0b0910 0%, #100b16 48%, #080a10 100%);
+        radial-gradient(ellipse 70% 64% at 104% -8%, rgba(231, 183, 108, 0.14) 0%, transparent 63%),
+        radial-gradient(ellipse 62% 76% at -8% 108%, rgba(120, 61, 84, 0.13) 0%, transparent 64%),
+        radial-gradient(ellipse 46% 48% at 52% 42%, rgba(130, 83, 111, 0.055) 0%, transparent 72%),
+        linear-gradient(135deg, #0e090e 0%, #150c16 48%, #0a0910 100%);
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -68,8 +68,8 @@ body::before {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse 45% 35% at 72% 20%, rgba(242, 204, 139, 0.055) 0%, transparent 72%),
-        radial-gradient(ellipse 40% 46% at 24% 76%, rgba(139, 92, 180, 0.05) 0%, transparent 72%);
+        radial-gradient(ellipse 45% 35% at 72% 20%, rgba(248, 204, 132, 0.075) 0%, transparent 72%),
+        radial-gradient(ellipse 40% 46% at 24% 76%, rgba(166, 86, 115, 0.06) 0%, transparent 72%);
     animation: bgPulse 14s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
