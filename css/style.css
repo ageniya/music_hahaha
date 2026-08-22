@@ -5,12 +5,12 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #0a0910;
-    --bg-secondary: #12101a;
-    --bg-tertiary: #0e0b14;
-    --bg-card: #181421;
-    --bg-card-hover: #211a2d;
-    --bg-input: #0e0b15;
+    --bg-primary: #090807;
+    --bg-secondary: #12100d;
+    --bg-tertiary: #0d0c0a;
+    --bg-card: #181510;
+    --bg-card-hover: #242017;
+    --bg-input: #0d0b09;
     --text-primary: #ececf2;
     --text-secondary: #a8a8c0;
     --text-muted: #5e5e78;
@@ -50,10 +50,10 @@ html {
 body {
     font-family: var(--font);
     background:
-        radial-gradient(ellipse 70% 64% at 104% -8%, rgba(231, 183, 108, 0.14) 0%, transparent 63%),
-        radial-gradient(ellipse 62% 76% at -8% 108%, rgba(120, 61, 84, 0.13) 0%, transparent 64%),
-        radial-gradient(ellipse 46% 48% at 52% 42%, rgba(130, 83, 111, 0.055) 0%, transparent 72%),
-        linear-gradient(135deg, #0e090e 0%, #150c16 48%, #0a0910 100%);
+        radial-gradient(ellipse 75% 66% at 106% -10%, rgba(242, 190, 98, 0.24) 0%, rgba(164, 105, 37, 0.08) 38%, transparent 66%),
+        radial-gradient(ellipse 56% 70% at -10% 104%, rgba(137, 81, 28, 0.15) 0%, transparent 65%),
+        radial-gradient(ellipse 42% 48% at 48% 38%, rgba(255, 210, 128, 0.035) 0%, transparent 72%),
+        linear-gradient(135deg, #070706 0%, #100e09 48%, #080807 100%);
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -68,8 +68,8 @@ body::before {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse 45% 35% at 72% 20%, rgba(248, 204, 132, 0.075) 0%, transparent 72%),
-        radial-gradient(ellipse 40% 46% at 24% 76%, rgba(166, 86, 115, 0.06) 0%, transparent 72%);
+        radial-gradient(ellipse 48% 38% at 76% 17%, rgba(255, 215, 139, 0.13) 0%, rgba(227, 161, 65, 0.04) 42%, transparent 72%),
+        radial-gradient(ellipse 42% 48% at 19% 80%, rgba(177, 109, 37, 0.08) 0%, transparent 72%);
     animation: bgPulse 14s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
