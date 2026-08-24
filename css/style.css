@@ -59,15 +59,16 @@ body {
     overflow: hidden;
 }
 
-/* 背景细节：使用硬边金线，不使用大面积模糊光晕 */
+/* 黑曜石背景：清晰的深色层次与细金属线条 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        linear-gradient(118deg, transparent 0 60.86%, rgba(222, 184, 111, 0.34) 60.86% 60.94%, transparent 60.94% 100%),
-        linear-gradient(90deg, transparent 0 8%, rgba(255, 239, 204, 0.035) 8% 8.08%, transparent 8.08% 100%);
-    opacity: 0.75;
+        linear-gradient(118deg, transparent 0 60.86%, rgba(222, 184, 111, 0.32) 60.86% 60.94%, transparent 60.94% 100%),
+        linear-gradient(90deg, transparent 0 7.5%, rgba(255, 239, 204, 0.045) 7.5% 7.57%, transparent 7.57% 100%),
+        repeating-linear-gradient(90deg, transparent 0 119px, rgba(255, 255, 255, 0.016) 119px 120px);
+    opacity: 0.72;
     pointer-events: none;
     z-index: 0;
 }
@@ -92,14 +93,22 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 36px;
-    background: rgba(12, 12, 26, 0.6);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 18px 40px;
+    background: #0b0f15;
+    border-bottom: 1px solid #34322b;
     position: sticky;
     top: 0;
     z-index: 100;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 40px;
+    width: 152px;
+    height: 1px;
+    background: var(--accent-light);
 }
 
 .header-left {
@@ -111,12 +120,12 @@ body::before {
 .header-logo {
     height: 128px;
     width: auto;
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
+    filter: drop-shadow(0 1px 0 rgba(232, 203, 139, 0.28));
 }
 
 .subtitle {
     font-size: 0.83rem;
-    color: var(--text-muted);
+    color: #9f987f;
     font-weight: 400;
     letter-spacing: 0.03em;
     padding-left: 16px;
@@ -133,7 +142,7 @@ body::before {
 .btn {
     padding: 10px 20px;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: 7px;
     font-size: 0.88rem;
     font-weight: 500;
     cursor: pointer;
@@ -151,24 +160,26 @@ body::before {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: #fff;
-    box-shadow: 0 2px 12px var(--accent-glow);
+    background: var(--accent);
+    border: 1px solid var(--accent-light);
+    color: #17130d;
+    box-shadow: inset 0 1px 0 rgba(255, 247, 221, 0.42);
 }
 .btn-primary:hover {
-    box-shadow: 0 6px 24px rgba(124, 92, 252, 0.4);
+    background: var(--accent-light);
+    box-shadow: inset 0 1px 0 rgba(255, 250, 230, 0.5);
     transform: translateY(-1px);
 }
 
 .btn-outline {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #10151c;
+    color: #c1bcae;
+    border: 1px solid #3d3a31;
 }
 .btn-outline:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text-primary);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #171c22;
+    color: var(--accent-light);
+    border-color: var(--accent);
 }
 
 .btn-small {
@@ -233,30 +244,23 @@ body::before {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: rgba(18, 18, 31, 0.2);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    margin: 8px;
+    background: #10151c;
+    border: 1px solid #30332f;
+    border-radius: 12px;
+    margin: 10px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
     position: relative;
 }
 
-/* 面板顶部微光流动 */
+/* 面板顶部金属饰线 */
 .panel::before {
     content: '';
     position: absolute;
-    top: -1px; left: 30px; right: 30px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, rgba(124, 92, 252, 0.4), rgba(167, 139, 250, 0.5), rgba(124, 92, 252, 0.4), transparent);
-    animation: shimmer 3.5s ease-in-out infinite;
+    top: -1px; left: 24px; right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(232, 203, 139, 0.68), transparent);
     z-index: 2;
     pointer-events: none;
-}
-
-@keyframes shimmer {
-    0%, 100% { opacity: 0.4; left: 40px; right: 40px; }
-    50% { opacity: 1; left: 5px; right: 5px; }
 }
 
 /* 旧版漂浮音符容器：保留结构，但不再生成高干扰 emoji 元素 */
@@ -334,7 +338,7 @@ body::before {
 
 .divider {
     width: 1px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #34342e;
     flex-shrink: 0;
     margin: 8px 0;
     border-radius: 1px;
@@ -345,7 +349,8 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px 14px;
+    padding: 21px 24px 15px;
+    border-bottom: 1px solid rgba(232, 203, 139, 0.08);
     flex-shrink: 0;
 }
 
@@ -353,16 +358,16 @@ body::before {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.045em;
 }
 
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: rgba(255, 255, 255, 0.04);
+    background: #15191d;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid #3a3930;
 }
 
 .playlist-actions {
@@ -391,7 +396,7 @@ body::before {
 }
 .search-box input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
+    box-shadow: 0 0 0 2px rgba(199, 155, 82, 0.18);
 }
 .search-box input::placeholder {
     color: var(--text-muted);
@@ -826,7 +831,7 @@ body::before {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: var(--bg-secondary);
+    background: #0c1015;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1406,10 +1411,8 @@ body::before {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: rgba(12, 12, 26, 0.88);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        background: #0b0f15;
+        border-top: 1px solid #34322b;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }
@@ -1435,7 +1438,7 @@ body::before {
     .mobile-tab.active {
         color: var(--accent-light);
         border-top-color: var(--accent);
-        background: rgba(124, 92, 252, 0.08);
+        background: rgba(199, 155, 82, 0.08);
     }
     .mobile-tab-icon {
         font-size: 1.3rem;
@@ -1568,7 +1571,7 @@ body::before {
         height: auto;
         padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
         gap: 6px 10px;
-        background: rgba(18, 18, 31, 0.95);
+        background: #10151c;
     }
     .web-pet {
         right: 4px;
@@ -1697,7 +1700,7 @@ body::before {
     color: var(--success);
 }
 .badge-scene {
-    background: rgba(124, 92, 252, 0.15);
+    background: rgba(199, 155, 82, 0.15);
     color: var(--accent-light);
 }
 .badge-cue {
@@ -1719,7 +1722,7 @@ body::before {
 .drag-over-zone {
     outline: 2px dashed var(--accent) !important;
     outline-offset: -4px;
-    background: rgba(124, 92, 252, 0.05) !important;
+    background: rgba(199, 155, 82, 0.06) !important;
 }
 
 /* --- 音频编辑器模态框 --- */
