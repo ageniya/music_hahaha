@@ -5,25 +5,25 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #171310;
-    --bg-secondary: #211a16;
-    --bg-tertiary: #1b1512;
-    --bg-card: #282019;
-    --bg-card-hover: #332920;
-    --bg-input: #1a1411;
-    --text-primary: #f1eadf;
-    --text-secondary: #c7ba9f;
-    --text-muted: #8f806b;
-    --accent: #a98452;
-    --accent-light: #cdb17d;
-    --accent-dark: #705133;
-    --accent-glow: rgba(169, 132, 82, 0.16);
+    --bg-primary: #12100e;
+    --bg-secondary: #1b1714;
+    --bg-tertiary: #15110f;
+    --bg-card: #201b17;
+    --bg-card-hover: #2a241e;
+    --bg-input: #14100e;
+    --text-primary: #f6f0e6;
+    --text-secondary: #cfc0aa;
+    --text-muted: #91806c;
+    --accent: #c2a06c;
+    --accent-light: #ead3a0;
+    --accent-dark: #8b693d;
+    --accent-glow: rgba(194, 160, 108, 0.18);
     --success: #34d399;
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #493a2e;
-    --border-light: #65503e;
+    --border: #4c4034;
+    --border-light: #6d5b48;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,7 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background: #171310;
+    background: #12100e;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -90,8 +90,8 @@ body::before {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #211a16;
-    border-bottom: 1px solid #5e4937;
+    background: #1b1714;
+    border-bottom: 1px solid #655440;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -168,12 +168,12 @@ body::before {
 }
 
 .btn-outline {
-    background: #2a211b;
-    color: #cbbda3;
-    border: 1px solid #67513e;
+    background: #201b17;
+    color: #d4c4ab;
+    border: 1px solid #705c46;
 }
 .btn-outline:hover {
-    background: #34291f;
+    background: #2a241e;
     color: var(--accent-light);
     border-color: var(--accent);
 }
@@ -240,8 +240,8 @@ body::before {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: #282019;
-    border: 1px solid #4b3c30;
+    background: rgba(32, 27, 23, 0.93);
+    border: 1px solid #514333;
     border-radius: 12px;
     margin: 10px;
     box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
@@ -361,10 +361,10 @@ body::before {
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #1c1511;
+    background: #191410;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #5b4837;
+    border: 1px solid #66533d;
 }
 
 .playlist-actions {
@@ -828,7 +828,7 @@ body::before {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: #1c1612;
+    background: #171310;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1408,8 +1408,8 @@ body::before {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #211a16;
-        border-top: 1px solid #5e4937;
+        background: #1b1714;
+        border-top: 1px solid #655440;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }

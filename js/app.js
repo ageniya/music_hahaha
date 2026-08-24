@@ -518,7 +518,7 @@ const ParticleBg = {
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'particleCanvas';
         Object.assign(this._canvas.style, {
-            position: 'fixed', inset: '0', zIndex: '0',
+            position: 'fixed', inset: '0', zIndex: '2',
             pointerEvents: 'none',
         });
         document.body.prepend(this._canvas);
@@ -529,18 +529,18 @@ const ParticleBg = {
 
         // 少量、不同尺寸与不同上升速度的暖白亮点。
         this._particles = [];
-        const count = window.innerWidth < 768 ? 10 : 22;
+        const count = window.innerWidth < 768 ? 14 : 30;
         for (let i = 0; i < count; i++) {
             const isWarmWhite = Math.random() > 0.42;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
                 y: Math.random() * this._canvas.height,
-                r: Math.random() * 1.35 + 0.35,
+                r: Math.random() * 1.45 + 0.45,
                 vy: -(Math.random() * 0.09 + 0.025),
-                alpha: Math.random() * 0.16 + 0.07,
+                alpha: Math.random() * 0.2 + 0.22,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: Math.random() * 0.006 + 0.002,
-                color: isWarmWhite ? '255, 239, 204' : '222, 184, 111',
+                pulseSpeed: Math.random() * 0.012 + 0.005,
+                color: isWarmWhite ? '255, 240, 210' : '224, 190, 128',
             });
         }
         this._animate();
@@ -566,13 +566,13 @@ const ParticleBg = {
                 p.x = Math.random() * W;
             }
 
-            const breathe = 0.82 + Math.sin(p.pulse) * 0.1;
+            const breathe = 0.65 + Math.sin(p.pulse) * 0.35;
             const alpha = p.alpha * breathe;
 
             // 清晰的实体亮点，不使用模糊光晕。
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${p.color}, ${Math.min(0.5, alpha * 1.5)})`;
+            ctx.fillStyle = `rgba(${p.color}, ${Math.min(0.72, alpha)})`;
             ctx.fill();
         }
     },
