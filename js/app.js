@@ -506,10 +506,13 @@ const ParticleBg = {
     _ctx: null,
     _particles: [],
     _animId: null,
+    _onResize: null,
 
     start() {
-        // 页面热更新或重复初始化时，避免叠加多个 canvas 和粒子群。
+        // 页面热更新或重复初始化时，停止旧实例，避免叠加多个 canvas 和粒子群。
         if (this._animId) return;
+        if (window.__musicParticleBgStop) window.__musicParticleBgStop();
+        window.__musicParticleBgStop = () => this.stop();
         const existingCanvas = document.getElementById('particleCanvas');
         if (existingCanvas) existingCanvas.remove();
         this._canvas = document.createElement('canvas');
@@ -521,23 +524,23 @@ const ParticleBg = {
         document.body.prepend(this._canvas);
         this._ctx = this._canvas.getContext('2d');
         this._resize();
-        window.addEventListener('resize', () => this._resize());
+        this._onResize = () => this._resize();
+        window.addEventListener('resize', this._onResize);
 
-        // 少量低亮度微粒，作为氛围而非视觉主体。
+        // 少量、不同尺寸与不同上升速度的暖白亮点。
         this._particles = [];
-        const count = window.innerWidth < 768 ? 12 : 26;
+        const count = window.innerWidth < 768 ? 10 : 22;
         for (let i = 0; i < count; i++) {
-            const isGold = Math.random() > 0.38;
+            const isWarmWhite = Math.random() > 0.42;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
                 y: Math.random() * this._canvas.height,
-                r: Math.random() * 1.1 + 0.45,
-                vx: (Math.random() - 0.5) * 0.12,
-                vy: (Math.random() - 0.5) * 0.12 - 0.04,
-                alpha: Math.random() * 0.2 + 0.08,
+                r: Math.random() * 1.35 + 0.35,
+                vy: -(Math.random() * 0.09 + 0.025),
+                alpha: Math.random() * 0.16 + 0.07,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: Math.random() * 0.009 + 0.004,
-                color: isGold ? '226, 190, 126' : '143, 108, 183',
+                pulseSpeed: Math.random() * 0.006 + 0.002,
+                color: isWarmWhite ? '255, 239, 204' : '222, 184, 111',
             });
         }
         this._animate();
@@ -556,25 +559,23 @@ const ParticleBg = {
         ctx.clearRect(0, 0, W, H);
 
         for (const p of this._particles) {
-            p.x += p.vx;
             p.y += p.vy;
             p.pulse += p.pulseSpeed;
-            if (p.x < -20) p.x = W + 20;
-            if (p.x > W + 20) p.x = -20;
-            if (p.y < -20) p.y = H + 20;
-            if (p.y > H + 20) p.y = -20;
+            if (p.y < -18) {
+                p.y = H + 18;
+                p.x = Math.random() * W;
+            }
 
-            const breathe = 0.75 + Math.sin(p.pulse) * 0.22;
+            const breathe = 0.78 + Math.sin(p.pulse) * 0.14;
             const alpha = p.alpha * breathe;
 
-            // 外层大光晕
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 9);
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 7);
             glow.addColorStop(0, `rgba(${p.color}, ${Math.min(1, alpha)})`);
             glow.addColorStop(0.35, `rgba(${p.color}, ${alpha * 0.32})`);
             glow.addColorStop(0.7, `rgba(${p.color}, ${alpha * 0.08})`);
             glow.addColorStop(1, `rgba(${p.color}, 0)`);
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r * 9, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, p.r * 7, 0, Math.PI * 2);
             ctx.fillStyle = glow;
             ctx.fill();
 
@@ -584,6 +585,16 @@ const ParticleBg = {
             ctx.fillStyle = `rgba(255, 248, 235, ${Math.min(0.42, alpha * 1.4)})`;
             ctx.fill();
         }
+    },
+
+    stop() {
+        if (this._animId) cancelAnimationFrame(this._animId);
+        if (this._onResize) window.removeEventListener('resize', this._onResize);
+        if (this._canvas) this._canvas.remove();
+        this._animId = null;
+        this._canvas = null;
+        this._ctx = null;
+        this._onResize = null;
     },
 };
 

@@ -5,25 +5,25 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #090807;
-    --bg-secondary: #12100d;
-    --bg-tertiary: #0d0c0a;
-    --bg-card: #181510;
-    --bg-card-hover: #242017;
-    --bg-input: #0d0b09;
+    --bg-primary: #07090d;
+    --bg-secondary: #0e1218;
+    --bg-tertiary: #090d13;
+    --bg-card: #12171e;
+    --bg-card-hover: #1a2028;
+    --bg-input: #0a0e14;
     --text-primary: #ececf2;
-    --text-secondary: #a8a8c0;
-    --text-muted: #5e5e78;
-    --accent: #7c5cfc;
-    --accent-light: #a78bfa;
-    --accent-dark: #6d28d9;
-    --accent-glow: rgba(124, 92, 252, 0.25);
+    --text-secondary: #b8b5ac;
+    --text-muted: #72757d;
+    --accent: #c79b52;
+    --accent-light: #e8cb8b;
+    --accent-dark: #8d682e;
+    --accent-glow: rgba(199, 155, 82, 0.24);
     --success: #34d399;
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #1e1e38;
-    --border-light: #28284a;
+    --border: #292d32;
+    --border-light: #414039;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,10 +50,10 @@ html {
 body {
     font-family: var(--font);
     background:
-        radial-gradient(ellipse 75% 66% at 106% -10%, rgba(242, 190, 98, 0.24) 0%, rgba(164, 105, 37, 0.08) 38%, transparent 66%),
-        radial-gradient(ellipse 56% 70% at -10% 104%, rgba(137, 81, 28, 0.15) 0%, transparent 65%),
-        radial-gradient(ellipse 42% 48% at 48% 38%, rgba(255, 210, 128, 0.035) 0%, transparent 72%),
-        linear-gradient(135deg, #070706 0%, #100e09 48%, #080807 100%);
+        radial-gradient(ellipse 68% 60% at 106% -12%, rgba(235, 190, 111, 0.18) 0%, rgba(151, 103, 43, 0.055) 40%, transparent 67%),
+        radial-gradient(ellipse 78% 72% at -18% 104%, rgba(31, 49, 74, 0.24) 0%, transparent 68%),
+        radial-gradient(ellipse 42% 48% at 48% 40%, rgba(230, 191, 122, 0.025) 0%, transparent 73%),
+        linear-gradient(135deg, #05070a 0%, #0a0d12 51%, #07080b 100%);
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -62,14 +62,14 @@ body {
     overflow: hidden;
 }
 
-/* 背景微动光晕：深紫与暖金，保持低对比度以突出内容 */
+/* 背景微动光晕：深夜蓝黑与香槟金，保持低对比度以突出内容 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse 48% 38% at 76% 17%, rgba(255, 215, 139, 0.13) 0%, rgba(227, 161, 65, 0.04) 42%, transparent 72%),
-        radial-gradient(ellipse 42% 48% at 19% 80%, rgba(177, 109, 37, 0.08) 0%, transparent 72%);
+        radial-gradient(ellipse 48% 38% at 77% 17%, rgba(255, 222, 157, 0.1) 0%, rgba(217, 165, 83, 0.025) 42%, transparent 72%),
+        radial-gradient(ellipse 42% 48% at 18% 82%, rgba(42, 62, 91, 0.09) 0%, transparent 72%);
     animation: bgPulse 14s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
