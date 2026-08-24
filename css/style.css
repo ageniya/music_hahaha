@@ -5,12 +5,12 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #12100e;
-    --bg-secondary: #1b1714;
-    --bg-tertiary: #15110f;
-    --bg-card: #201b17;
-    --bg-card-hover: #2a241e;
-    --bg-input: #14100e;
+    --bg-primary: #10130f;
+    --bg-secondary: #192016;
+    --bg-tertiary: #141912;
+    --bg-card: #23291d;
+    --bg-card-hover: #2e3726;
+    --bg-input: #151a13;
     --text-primary: #f6f0e6;
     --text-secondary: #cfc0aa;
     --text-muted: #91806c;
@@ -22,8 +22,8 @@
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #4c4034;
-    --border-light: #6d5b48;
+    --border: #4b5038;
+    --border-light: #6b704e;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,7 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background: #12100e;
+    background: #10130f;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -59,12 +59,25 @@ body {
     overflow: hidden;
 }
 
-/* 老钱风背景：以实体炭黑为主，不使用科技线条或光晕 */
+/* 老钱风背景：深松木底色与极淡羊毛面料纹理 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    display: none;
+    display: block;
+    background:
+        repeating-linear-gradient(115deg, rgba(255, 246, 224, 0.014) 0 1px, transparent 1px 10px),
+        linear-gradient(90deg, transparent 0 7.4%, rgba(205, 177, 125, 0.12) 7.4% 7.46%, transparent 7.46% 100%);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 14px;
+    border: 1px solid rgba(205, 177, 125, 0.13);
     pointer-events: none;
     z-index: 0;
 }
@@ -90,8 +103,8 @@ body::before {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #1b1714;
-    border-bottom: 1px solid #655440;
+    background: #192016;
+    border-bottom: 1px solid #5e6544;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -168,12 +181,12 @@ body::before {
 }
 
 .btn-outline {
-    background: #201b17;
+    background: #20271b;
     color: #d4c4ab;
-    border: 1px solid #705c46;
+    border: 1px solid #6b704e;
 }
 .btn-outline:hover {
-    background: #2a241e;
+    background: #2e3726;
     color: var(--accent-light);
     border-color: var(--accent);
 }
@@ -240,8 +253,8 @@ body::before {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: rgba(32, 27, 23, 0.93);
-    border: 1px solid #514333;
+    background: rgba(31, 38, 26, 0.91);
+    border: 1px solid #51583b;
     border-radius: 12px;
     margin: 10px;
     box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
@@ -291,16 +304,21 @@ body::before {
     position: relative;
 }
 
-/* 工作区白色 logo 水印 */
+/* 面板右上黄铜角标 */
+.panel-library::after,
 .panel-playlist::after {
     content: '';
     position: absolute;
-    inset: 20% 0 0 0;
-    background: url('../images/logo-white.png') center center no-repeat;
-    background-size: 360px auto;
-    opacity: 0.18;
+    top: 14px;
+    right: 14px;
+    width: 14px;
+    height: 14px;
+    border-top: 1px solid rgba(205, 177, 125, 0.48);
+    border-right: 1px solid rgba(205, 177, 125, 0.48);
+    background: none;
+    opacity: 1;
     pointer-events: none;
-    z-index: 0;
+    z-index: 3;
 }
 
 .panel-playlist > * {
@@ -352,19 +370,30 @@ body::before {
 
 .panel-header h2 {
     font-family: var(--display-font);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
     letter-spacing: 0.07em;
 }
 
+.section-index {
+    color: var(--accent-light);
+    font-family: var(--font);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+}
+
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #191410;
+    background: #181d14;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #66533d;
+    border: 1px solid #626947;
 }
 
 .playlist-actions {
@@ -828,7 +857,7 @@ body::before {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: #171310;
+    background: #151a12;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1408,8 +1437,8 @@ body::before {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #1b1714;
-        border-top: 1px solid #655440;
+        background: #192016;
+        border-top: 1px solid #5e6544;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }
