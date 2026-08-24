@@ -5,25 +5,25 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #07090d;
-    --bg-secondary: #0e1218;
-    --bg-tertiary: #090d13;
-    --bg-card: #12171e;
-    --bg-card-hover: #1a2028;
-    --bg-input: #0a0e14;
-    --text-primary: #ececf2;
-    --text-secondary: #b8b5ac;
-    --text-muted: #72757d;
-    --accent: #c79b52;
-    --accent-light: #e8cb8b;
-    --accent-dark: #8d682e;
-    --accent-glow: rgba(199, 155, 82, 0.24);
+    --bg-primary: #171310;
+    --bg-secondary: #211a16;
+    --bg-tertiary: #1b1512;
+    --bg-card: #282019;
+    --bg-card-hover: #332920;
+    --bg-input: #1a1411;
+    --text-primary: #f1eadf;
+    --text-secondary: #c7ba9f;
+    --text-muted: #8f806b;
+    --accent: #a98452;
+    --accent-light: #cdb17d;
+    --accent-dark: #705133;
+    --accent-glow: rgba(169, 132, 82, 0.16);
     --success: #34d399;
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #292d32;
-    --border-light: #414039;
+    --border: #493a2e;
+    --border-light: #65503e;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -32,6 +32,7 @@
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0,0,0,0.25);
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --display-font: Georgia, 'Times New Roman', 'Songti SC', serif;
 }
 
 /* --- 全局重置 --- */
@@ -49,8 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background:
-        linear-gradient(118deg, #07090d 0 61%, #0b0f15 61% 100%);
+    background: #171310;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -59,16 +59,12 @@ body {
     overflow: hidden;
 }
 
-/* 黑曜石背景：清晰的深色层次与细金属线条 */
+/* 老钱风背景：以实体炭黑为主，不使用科技线条或光晕 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background:
-        linear-gradient(118deg, transparent 0 60.86%, rgba(222, 184, 111, 0.32) 60.86% 60.94%, transparent 60.94% 100%),
-        linear-gradient(90deg, transparent 0 7.5%, rgba(255, 239, 204, 0.045) 7.5% 7.57%, transparent 7.57% 100%),
-        repeating-linear-gradient(90deg, transparent 0 119px, rgba(255, 255, 255, 0.016) 119px 120px);
-    opacity: 0.72;
+    display: none;
     pointer-events: none;
     z-index: 0;
 }
@@ -94,8 +90,8 @@ body::before {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #0b0f15;
-    border-bottom: 1px solid #34322b;
+    background: #211a16;
+    border-bottom: 1px solid #5e4937;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -106,9 +102,9 @@ body::before {
     position: absolute;
     bottom: -1px;
     left: 40px;
-    width: 152px;
+    width: 116px;
     height: 1px;
-    background: var(--accent-light);
+    background: #b99863;
 }
 
 .header-left {
@@ -120,12 +116,12 @@ body::before {
 .header-logo {
     height: 128px;
     width: auto;
-    filter: drop-shadow(0 1px 0 rgba(232, 203, 139, 0.28));
+    filter: none;
 }
 
 .subtitle {
     font-size: 0.83rem;
-    color: #9f987f;
+    color: #ac9a7c;
     font-weight: 400;
     letter-spacing: 0.03em;
     padding-left: 16px;
@@ -172,12 +168,12 @@ body::before {
 }
 
 .btn-outline {
-    background: #10151c;
-    color: #c1bcae;
-    border: 1px solid #3d3a31;
+    background: #2a211b;
+    color: #cbbda3;
+    border: 1px solid #67513e;
 }
 .btn-outline:hover {
-    background: #171c22;
+    background: #34291f;
     color: var(--accent-light);
     border-color: var(--accent);
 }
@@ -244,21 +240,21 @@ body::before {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: #10151c;
-    border: 1px solid #30332f;
+    background: #282019;
+    border: 1px solid #4b3c30;
     border-radius: 12px;
     margin: 10px;
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
     position: relative;
 }
 
-/* 面板顶部金属饰线 */
+/* 面板顶部黄铜饰线 */
 .panel::before {
     content: '';
     position: absolute;
     top: -1px; left: 24px; right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(232, 203, 139, 0.68), transparent);
+    background: linear-gradient(90deg, transparent, rgba(205, 177, 125, 0.7), transparent);
     z-index: 2;
     pointer-events: none;
 }
@@ -338,7 +334,7 @@ body::before {
 
 .divider {
     width: 1px;
-    background: #34342e;
+    background: #594637;
     flex-shrink: 0;
     margin: 8px 0;
     border-radius: 1px;
@@ -355,19 +351,20 @@ body::before {
 }
 
 .panel-header h2 {
+    font-family: var(--display-font);
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
-    letter-spacing: 0.045em;
+    letter-spacing: 0.07em;
 }
 
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #15191d;
+    background: #1c1511;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #3a3930;
+    border: 1px solid #5b4837;
 }
 
 .playlist-actions {
@@ -831,7 +828,7 @@ body::before {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: #0c1015;
+    background: #1c1612;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1411,8 +1408,8 @@ body::before {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #0b0f15;
-        border-top: 1px solid #34322b;
+        background: #211a16;
+        border-top: 1px solid #5e4937;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }
