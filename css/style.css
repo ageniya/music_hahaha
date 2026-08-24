@@ -50,10 +50,7 @@ html {
 body {
     font-family: var(--font);
     background:
-        radial-gradient(ellipse 68% 60% at 106% -12%, rgba(235, 190, 111, 0.18) 0%, rgba(151, 103, 43, 0.055) 40%, transparent 67%),
-        radial-gradient(ellipse 78% 72% at -18% 104%, rgba(31, 49, 74, 0.24) 0%, transparent 68%),
-        radial-gradient(ellipse 42% 48% at 48% 40%, rgba(230, 191, 122, 0.025) 0%, transparent 73%),
-        linear-gradient(135deg, #05070a 0%, #0a0d12 51%, #07080b 100%);
+        linear-gradient(118deg, #07090d 0 61%, #0b0f15 61% 100%);
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -62,22 +59,17 @@ body {
     overflow: hidden;
 }
 
-/* 背景微动光晕：深夜蓝黑与香槟金，保持低对比度以突出内容 */
+/* 背景细节：使用硬边金线，不使用大面积模糊光晕 */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse 48% 38% at 77% 17%, rgba(255, 222, 157, 0.1) 0%, rgba(217, 165, 83, 0.025) 42%, transparent 72%),
-        radial-gradient(ellipse 42% 48% at 18% 82%, rgba(42, 62, 91, 0.09) 0%, transparent 72%);
-    animation: bgPulse 14s ease-in-out infinite;
+        linear-gradient(118deg, transparent 0 60.86%, rgba(222, 184, 111, 0.34) 60.86% 60.94%, transparent 60.94% 100%),
+        linear-gradient(90deg, transparent 0 8%, rgba(255, 239, 204, 0.035) 8% 8.08%, transparent 8.08% 100%);
+    opacity: 0.75;
     pointer-events: none;
     z-index: 0;
-}
-
-@keyframes bgPulse {
-    0%, 100% { opacity: 0.42; transform: scale(1); }
-    50% { opacity: 0.78; transform: scale(1.035); }
 }
 
 /* --- 滚动条 --- */

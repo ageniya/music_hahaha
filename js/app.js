@@ -566,23 +566,13 @@ const ParticleBg = {
                 p.x = Math.random() * W;
             }
 
-            const breathe = 0.78 + Math.sin(p.pulse) * 0.14;
+            const breathe = 0.82 + Math.sin(p.pulse) * 0.1;
             const alpha = p.alpha * breathe;
 
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 7);
-            glow.addColorStop(0, `rgba(${p.color}, ${Math.min(1, alpha)})`);
-            glow.addColorStop(0.35, `rgba(${p.color}, ${alpha * 0.32})`);
-            glow.addColorStop(0.7, `rgba(${p.color}, ${alpha * 0.08})`);
-            glow.addColorStop(1, `rgba(${p.color}, 0)`);
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r * 7, 0, Math.PI * 2);
-            ctx.fillStyle = glow;
-            ctx.fill();
-
-            // 核心亮点
+            // 清晰的实体亮点，不使用模糊光晕。
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 248, 235, ${Math.min(0.42, alpha * 1.4)})`;
+            ctx.fillStyle = `rgba(${p.color}, ${Math.min(0.5, alpha * 1.5)})`;
             ctx.fill();
         }
     },
