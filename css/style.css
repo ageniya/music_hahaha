@@ -5,12 +5,12 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #10130f;
-    --bg-secondary: #192016;
-    --bg-tertiary: #141912;
-    --bg-card: #23291d;
-    --bg-card-hover: #2e3726;
-    --bg-input: #151a13;
+    --bg-primary: #11100e;
+    --bg-secondary: #1d1b18;
+    --bg-tertiary: #161411;
+    --bg-card: #26231e;
+    --bg-card-hover: #302c25;
+    --bg-input: #181611;
     --text-primary: #f6f0e6;
     --text-secondary: #cfc0aa;
     --text-muted: #91806c;
@@ -22,8 +22,8 @@
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #4b5038;
-    --border-light: #6b704e;
+    --border: #564e42;
+    --border-light: #746956;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,7 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background: #10130f;
+    background: #11100e;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -59,7 +59,7 @@ body {
     overflow: hidden;
 }
 
-/* 老钱风背景：深松木底色与极淡羊毛面料纹理 */
+/* 老钱风背景：中性炭黑底色与极淡羊毛面料纹理 */
 body::before {
     content: '';
     position: fixed;
@@ -103,8 +103,8 @@ body::after {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #192016;
-    border-bottom: 1px solid #5e6544;
+    background: #1d1b18;
+    border-bottom: 1px solid #645b4e;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -181,14 +181,25 @@ body::after {
 }
 
 .btn-outline {
-    background: #20271b;
+    background: #26231e;
     color: #d4c4ab;
-    border: 1px solid #6b704e;
+    border: 1px solid #746956;
 }
 .btn-outline:hover {
-    background: #2e3726;
+    background: #302c25;
     color: var(--accent-light);
     border-color: var(--accent);
+}
+
+.btn-utility {
+    padding-inline: 14px;
+    font-size: 0.8rem;
+}
+
+.btn-utility.is-active {
+    border-color: var(--accent);
+    color: var(--accent-light);
+    background: #2a251e;
 }
 
 .btn-small {
@@ -253,12 +264,19 @@ body::after {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: rgba(31, 38, 26, 0.91);
-    border: 1px solid #51583b;
+    background: rgba(34, 32, 28, 0.91);
+    border: 1px solid #5a5144;
     border-radius: 12px;
     margin: 10px;
     box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
     position: relative;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+    border-color: #857354;
+    box-shadow: 0 16px 30px rgba(20, 13, 8, 0.3);
 }
 
 /* 面板顶部黄铜饰线 */
@@ -282,6 +300,14 @@ body::after {
 
 .note-dynamic {
     will-change: transform, opacity;
+}
+
+#particleCanvas {
+    transition: opacity 0.3s ease;
+}
+
+body.ambient-muted #particleCanvas {
+    opacity: 0.04;
 }
 
 @keyframes floatRandom {
@@ -390,10 +416,10 @@ body::after {
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #181d14;
+    background: #1c1915;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #626947;
+    border: 1px solid #6b614f;
 }
 
 .playlist-actions {
@@ -857,7 +883,7 @@ body::after {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: #151a12;
+    background: #171510;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1425,6 +1451,9 @@ body::after {
         font-size: 0.8rem;
         border-radius: 8px;
     }
+    .header-right .btn-utility {
+        display: none;
+    }
     .main-container {
         flex-direction: column;
         flex: 1;
@@ -1437,8 +1466,8 @@ body::after {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #192016;
-        border-top: 1px solid #5e6544;
+        background: #1d1b18;
+        border-top: 1px solid #645b4e;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }

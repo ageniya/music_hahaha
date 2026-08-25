@@ -782,6 +782,8 @@ const App = {
 
         // 导出 ZIP
         document.getElementById('btnExportZip').addEventListener('click', () => this._exportZip());
+        document.getElementById('btnRandomSong').addEventListener('click', () => this._playRandomSong());
+        document.getElementById('btnAmbient').addEventListener('click', () => this._toggleAmbient());
         // 导出信息
         document.getElementById('btnExportPlaylist').addEventListener('click', () => this._exportWorkspaceInfo());
 
@@ -1396,6 +1398,25 @@ const App = {
             this.player.currentIndex = allSongs.findIndex(s => s.id === songId);
             this._loadAndPlay(song);
         });
+    },
+
+    _playRandomSong() {
+        const playableSongs = MusicData.getAllSongs().filter(song => FileStorage.has(song.id) || song.audioUrl);
+        if (playableSongs.length === 0) {
+            this._toast('曲库里还没有可播放的音乐', 'error');
+            return;
+        }
+        const song = playableSongs[Math.floor(Math.random() * playableSongs.length)];
+        this._playLibrarySong(song.id);
+        this._toast(`随机试听：${song.title}`, 'success');
+    },
+
+    _toggleAmbient() {
+        const muted = document.body.classList.toggle('ambient-muted');
+        const button = document.getElementById('btnAmbient');
+        button.classList.toggle('is-active', !muted);
+        button.setAttribute('aria-pressed', String(!muted));
+        this._toast(muted ? '背景亮点已隐藏' : '背景亮点已开启');
     },
 
     _playWorkspaceSong(wsId) {

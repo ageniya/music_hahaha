@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
-    <link rel="stylesheet" href="css/style.css?v=20260824f">
+    <link rel="stylesheet" href="css/style.css?v=20260825a">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -18,6 +18,12 @@
             <span class="subtitle">婚礼音乐库 · BGM 管理 & 歌单制作</span>
         </div>
         <div class="header-right">
+            <button class="btn btn-outline btn-utility" id="btnRandomSong" type="button" title="从曲库随机试听一首">
+                ♬ 随机一首
+            </button>
+            <button class="btn btn-outline btn-utility is-active" id="btnAmbient" type="button" title="显示或隐藏背景亮点" aria-pressed="true">
+                ✦ 氛围亮点
+            </button>
             <button class="btn btn-primary" id="btnUpload" title="上传 MP3 文件">
                 📥 上传 MP3
             </button>
@@ -206,7 +212,7 @@
         </div>
     </div>
     <script src="js/data.js?v=2"></script>
-    <script src="js/app.js?v=6"></script>
+    <script src="js/app.js?v=7"></script>
     <script src="js/web-pet-portrait.js?v=6"></script>
 
     <!-- 预设音乐库数据（内嵌，无需服务器） -->
