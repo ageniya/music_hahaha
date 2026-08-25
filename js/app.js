@@ -527,19 +527,20 @@ const ParticleBg = {
         this._onResize = () => this._resize();
         window.addEventListener('resize', this._onResize);
 
-        // 少量、不同尺寸与不同上升速度的暖白亮点。
+        // 大小、亮度、速度分层的暖白亮点；可由顶部开关随时关闭。
         this._particles = [];
-        const count = window.innerWidth < 768 ? 14 : 30;
+        const count = window.innerWidth < 768 ? 16 : 36;
         for (let i = 0; i < count; i++) {
             const isWarmWhite = Math.random() > 0.42;
+            const isLarge = Math.random() < 0.16;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
                 y: Math.random() * this._canvas.height,
-                r: Math.random() * 1.45 + 0.45,
-                vy: -(Math.random() * 0.09 + 0.025),
-                alpha: Math.random() * 0.2 + 0.22,
+                r: isLarge ? Math.random() * 2.1 + 2.1 : Math.random() * 1.55 + 0.55,
+                vy: -(Math.random() * (isLarge ? 0.065 : 0.11) + 0.035),
+                alpha: isLarge ? Math.random() * 0.2 + 0.36 : Math.random() * 0.25 + 0.24,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: Math.random() * 0.012 + 0.005,
+                pulseSpeed: Math.random() * 0.014 + 0.006,
                 color: isWarmWhite ? '255, 240, 210' : '224, 190, 128',
             });
         }
@@ -572,7 +573,7 @@ const ParticleBg = {
             // 清晰的实体亮点，不使用模糊光晕。
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${p.color}, ${Math.min(0.72, alpha)})`;
+            ctx.fillStyle = `rgba(${p.color}, ${Math.min(0.82, alpha)})`;
             ctx.fill();
         }
     },
