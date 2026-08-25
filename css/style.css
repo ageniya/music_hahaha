@@ -1054,12 +1054,12 @@ body.ambient-muted #particleCanvas {
 
 .web-pet-lid {
     position: absolute;
-    z-index: 1;
-    width: 7px;
-    height: 3.5px;
-    border-radius: 50% 50% 45% 45%;
-    background: linear-gradient(180deg, #ffc6ab 0%, #f3ae90 78%, #c97b64 100%);
-    box-shadow: 0 1px 0 rgba(115, 57, 43, 0.45);
+    z-index: 6;
+    width: 6.5px;
+    height: 3px;
+    border-radius: 55% 55% 48% 48%;
+    background: linear-gradient(180deg, #ffc9ae 0%, #f4b08f 72%, #cc8066 100%);
+    box-shadow: 0 0.6px 0 rgba(101, 48, 35, 0.58);
     transform: translateY(-50%) scaleY(0);
     transform-origin: center;
     opacity: 0;
@@ -1068,17 +1068,17 @@ body.ambient-muted #particleCanvas {
 }
 
 .web-pet-lid-left {
-    top: 21.8%;
-    left: 42%;
+    top: 21.65%;
+    left: 42.25%;
 }
 
 .web-pet-lid-right {
-    top: 20%;
-    left: 54.7%;
+    top: 20.1%;
+    left: 54.95%;
 }
 
 .web-pet-portrait.blinking .web-pet-lid {
-    opacity: 0.94;
+    opacity: 0.92;
     transform: translateY(-50%) scaleY(1);
     transition-timing-function: ease-in;
 }

@@ -9,11 +9,11 @@
 
     const blink = () => {
         pet.classList.add('blinking');
-        window.setTimeout(() => pet.classList.remove('blinking'), 210);
-        window.setTimeout(blink, 2600 + Math.random() * 3400);
+        window.setTimeout(() => pet.classList.remove('blinking'), 170);
+        window.setTimeout(blink, 2200 + Math.random() * 2200);
     };
 
-    window.setTimeout(blink, 1400 + Math.random() * 1500);
+    window.setTimeout(blink, 700 + Math.random() * 800);
 
     window.addEventListener('pointermove', (event) => {
         if (dragging) return;
