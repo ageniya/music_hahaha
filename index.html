@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
-    <link rel="stylesheet" href="css/style.css?v=20260827b">
+    <link rel="stylesheet" href="css/style.css?v=20260827d">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -51,6 +51,12 @@
             </div>
         </div>
         <div class="atelier-actions">
+            <div class="atelier-live" title="页面正在运行">
+                <span class="atelier-live-dot"></span>
+                <span id="atelierClock">--:--</span>
+                <span class="atelier-live-label">实时</span>
+                <span class="atelier-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            </div>
             <button class="atelier-action" id="btnToggleFolders" type="button">折叠曲库</button>
             <button class="atelier-action atelier-action-primary" id="btnFocusWorkspace" type="button">进入工作区 →</button>
         </div>
@@ -233,7 +239,7 @@
         </div>
     </div>
     <script src="js/data.js?v=2"></script>
-    <script src="js/app.js?v=9"></script>
+    <script src="js/app.js?v=10"></script>
     <script src="js/web-pet-portrait.js?v=7"></script>
 
     <!-- 预设音乐库数据（内嵌，无需服务器） -->

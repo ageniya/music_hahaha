@@ -527,11 +527,14 @@ const ParticleBg = {
         this._onResize = () => this._resize();
         window.addEventListener('resize', this._onResize);
 
-        // 大小、亮度、速度分层的暖白亮点；可由顶部开关随时关闭。
+        // 冷白、电蓝、紫与少量暖金分层；可由顶部开关随时关闭。
         this._particles = [];
         const count = window.innerWidth < 768 ? 16 : 36;
+        const colors = [
+            '235, 247, 255', '114, 192, 255', '196, 126, 255',
+            '91, 232, 214', '246, 207, 125',
+        ];
         for (let i = 0; i < count; i++) {
-            const isWarmWhite = Math.random() > 0.42;
             const isLarge = Math.random() < 0.16;
             this._particles.push({
                 x: Math.random() * this._canvas.width,
@@ -541,7 +544,7 @@ const ParticleBg = {
                 alpha: isLarge ? Math.random() * 0.2 + 0.36 : Math.random() * 0.25 + 0.24,
                 pulse: Math.random() * Math.PI * 2,
                 pulseSpeed: Math.random() * 0.014 + 0.006,
-                color: isWarmWhite ? '255, 240, 210' : '224, 190, 128',
+                color: colors[Math.floor(Math.random() * colors.length)],
             });
         }
         this._animate();
@@ -677,6 +680,7 @@ const App = {
     _editingWsItem: null,
     _isLoading: false,
     _foldersCollapsed: false,
+    _atelierClockTimer: null,
 
     player: {
         audio: null,
@@ -711,6 +715,7 @@ const App = {
         this.renderWorkspace();
         this.renderSavedPlaylists();
         this._bindEvents();
+        this._startAtelierClock();
 
         // 为工作区中已有的歌曲加载音频（从上次会话恢复的条目）
         this._loadAudioForWorkspace();
@@ -1432,6 +1437,18 @@ const App = {
         if (libraryStat) libraryStat.textContent = MusicData.count;
         if (workspaceStat) workspaceStat.textContent = Workspace.count;
         if (durationStat) durationStat.textContent = MusicData._formatDuration(Workspace.getTotalDuration());
+    },
+
+    _startAtelierClock() {
+        const clock = document.getElementById('atelierClock');
+        if (!clock || this._atelierClockTimer) return;
+        const update = () => {
+            clock.textContent = new Date().toLocaleTimeString('zh-CN', {
+                hour: '2-digit', minute: '2-digit', hour12: false,
+            });
+        };
+        update();
+        this._atelierClockTimer = window.setInterval(update, 30000);
     },
 
     _toggleFolders() {

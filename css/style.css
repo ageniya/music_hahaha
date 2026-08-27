@@ -5,25 +5,25 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #11100e;
-    --bg-secondary: #1d1b18;
-    --bg-tertiary: #161411;
-    --bg-card: #26231e;
-    --bg-card-hover: #302c25;
-    --bg-input: #181611;
+    --bg-primary: #080b16;
+    --bg-secondary: #101629;
+    --bg-tertiary: #0b1122;
+    --bg-card: #141e37;
+    --bg-card-hover: #1d2b4c;
+    --bg-input: #0c1428;
     --text-primary: #f6f0e6;
-    --text-secondary: #cfc0aa;
-    --text-muted: #91806c;
-    --accent: #c2a06c;
-    --accent-light: #ead3a0;
-    --accent-dark: #8b693d;
-    --accent-glow: rgba(194, 160, 108, 0.18);
+    --text-secondary: #c2cce0;
+    --text-muted: #7988a4;
+    --accent: #68a9ff;
+    --accent-light: #c2ddff;
+    --accent-dark: #326fc1;
+    --accent-glow: rgba(104, 169, 255, 0.2);
     --success: #34d399;
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #564e42;
-    --border-light: #746956;
+    --border: #2d4068;
+    --border-light: #46618f;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,7 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background: #11100e;
+    background: #080b16;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -66,8 +66,8 @@ body::before {
     inset: 0;
     display: block;
     background:
-        repeating-linear-gradient(115deg, rgba(255, 246, 224, 0.014) 0 1px, transparent 1px 10px),
-        linear-gradient(90deg, transparent 0 7.4%, rgba(205, 177, 125, 0.12) 7.4% 7.46%, transparent 7.46% 100%);
+        repeating-linear-gradient(115deg, rgba(220, 235, 255, 0.014) 0 1px, transparent 1px 10px),
+        linear-gradient(90deg, transparent 0 7.4%, rgba(121, 191, 255, 0.12) 7.4% 7.46%, transparent 7.46% 100%);
     opacity: 0.6;
     pointer-events: none;
     z-index: 0;
@@ -77,7 +77,7 @@ body::after {
     content: '';
     position: fixed;
     inset: 14px;
-    border: 1px solid rgba(205, 177, 125, 0.13);
+    border: 1px solid rgba(121, 191, 255, 0.14);
     pointer-events: none;
     z-index: 0;
 }
@@ -103,8 +103,8 @@ body::after {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #1d1b18;
-    border-bottom: 1px solid #645b4e;
+    background: #101629;
+    border-bottom: 1px solid #304674;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -117,7 +117,7 @@ body::after {
     left: 40px;
     width: 116px;
     height: 1px;
-    background: #b99863;
+    background: #86c5ff;
 }
 
 .header-left {
@@ -134,7 +134,7 @@ body::after {
 
 .subtitle {
     font-size: 0.83rem;
-    color: #ac9a7c;
+    color: #9eabc7;
     font-weight: 400;
     letter-spacing: 0.03em;
     padding-left: 16px;
@@ -155,9 +155,9 @@ body::after {
     gap: 28px;
     margin: 10px 10px 0;
     padding: 13px 22px;
-    background: #1d1b18;
-    border: 1px solid #564e42;
-    border-bottom-color: #6d5a43;
+    background: #101629;
+    border: 1px solid #2d4068;
+    border-bottom-color: #466fa3;
     border-radius: 10px 10px 0 0;
 }
 
@@ -221,11 +221,71 @@ body::after {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
+    align-items: center;
+}
+
+.atelier-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 5px;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+}
+
+.atelier-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: liveDot 1.8s ease-in-out infinite;
+}
+
+.atelier-live-label {
+    color: var(--accent-light);
+    font-size: 0.6rem;
+}
+
+.atelier-wave {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 16px;
+    margin-left: 4px;
+}
+
+.atelier-wave i {
+    display: block;
+    width: 2px;
+    height: 7px;
+    background: var(--accent);
+    animation: atelierWave 1.15s ease-in-out infinite;
+}
+
+.atelier-wave i:nth-child(2) { animation-delay: -0.9s; height: 12px; }
+.atelier-wave i:nth-child(3) { animation-delay: -0.65s; height: 9px; }
+.atelier-wave i:nth-child(4) { animation-delay: -0.4s; height: 14px; }
+.atelier-wave i:nth-child(5) { animation-delay: -0.15s; height: 6px; }
+
+body.ambient-muted .atelier-wave i {
+    animation-play-state: paused;
+    opacity: 0.28;
+}
+
+@keyframes liveDot {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes atelierWave {
+    0%, 100% { transform: scaleY(0.45); }
+    50% { transform: scaleY(1); }
 }
 
 .atelier-action {
     padding: 8px 12px;
-    border: 1px solid #5c5041;
+    border: 1px solid #3a5586;
     border-radius: 6px;
     background: transparent;
     color: var(--text-secondary);
@@ -237,7 +297,7 @@ body::after {
 
 .atelier-action:hover {
     border-color: var(--accent);
-    background: #2a251e;
+    background: #1a2b4c;
     color: var(--accent-light);
     transform: translateY(-1px);
 }
@@ -252,7 +312,7 @@ body::after {
 }
 
 @keyframes focusFlash {
-    0%, 100% { border-color: #5a5144; }
+    0%, 100% { border-color: #38517e; }
     35% { border-color: var(--accent-light); }
 }
 
@@ -290,12 +350,12 @@ body::after {
 }
 
 .btn-outline {
-    background: #26231e;
+    background: #141e37;
     color: #d4c4ab;
-    border: 1px solid #746956;
+    border: 1px solid #3a527f;
 }
 .btn-outline:hover {
-    background: #302c25;
+    background: #1d2b4c;
     color: var(--accent-light);
     border-color: var(--accent);
 }
@@ -373,8 +433,8 @@ body::after {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: rgba(34, 32, 28, 0.91);
-    border: 1px solid #5a5144;
+    background: rgba(20, 30, 55, 0.91);
+    border: 1px solid #38517e;
     border-radius: 12px;
     margin: 10px;
     box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
@@ -384,8 +444,8 @@ body::after {
 
 .panel:hover {
     transform: translateY(-2px);
-    border-color: #857354;
-    box-shadow: 0 16px 30px rgba(20, 13, 8, 0.3);
+    border-color: #77b5ff;
+    box-shadow: 0 16px 30px rgba(1, 6, 20, 0.4);
 }
 
 /* 面板顶部黄铜饰线 */
@@ -394,7 +454,7 @@ body::after {
     position: absolute;
     top: -1px; left: 24px; right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(205, 177, 125, 0.7), transparent);
+    background: linear-gradient(90deg, transparent, rgba(113, 191, 255, 0.72), transparent);
     z-index: 2;
     pointer-events: none;
 }
@@ -448,8 +508,8 @@ body.ambient-muted #particleCanvas {
     right: 14px;
     width: 14px;
     height: 14px;
-    border-top: 1px solid rgba(205, 177, 125, 0.48);
-    border-right: 1px solid rgba(205, 177, 125, 0.48);
+    border-top: 1px solid rgba(116, 192, 255, 0.58);
+    border-right: 1px solid rgba(116, 192, 255, 0.58);
     background: none;
     opacity: 1;
     pointer-events: none;
@@ -525,10 +585,10 @@ body.ambient-muted #particleCanvas {
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #1c1915;
+    background: #10182b;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #6b614f;
+    border: 1px solid #3b5682;
 }
 
 .playlist-actions {
@@ -557,7 +617,7 @@ body.ambient-muted #particleCanvas {
 }
 .search-box input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(199, 155, 82, 0.18);
+    box-shadow: 0 0 0 2px rgba(104, 169, 255, 0.2);
 }
 .search-box input::placeholder {
     color: var(--text-muted);
@@ -992,7 +1052,7 @@ body.ambient-muted #particleCanvas {
     align-items: center;
     gap: 16px;
     padding: 10px 24px;
-    background: #171510;
+    background: #0d1426;
     border-top: 1px solid var(--border);
     height: 64px;
     flex-shrink: 0;
@@ -1578,8 +1638,8 @@ body.ambient-muted #particleCanvas {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #1d1b18;
-        border-top: 1px solid #645b4e;
+        background: #101629;
+        border-top: 1px solid #304674;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }
@@ -1605,7 +1665,7 @@ body.ambient-muted #particleCanvas {
     .mobile-tab.active {
         color: var(--accent-light);
         border-top-color: var(--accent);
-        background: rgba(199, 155, 82, 0.08);
+        background: rgba(104, 169, 255, 0.1);
     }
     .mobile-tab-icon {
         font-size: 1.3rem;
@@ -1867,7 +1927,7 @@ body.ambient-muted #particleCanvas {
     color: var(--success);
 }
 .badge-scene {
-    background: rgba(199, 155, 82, 0.15);
+    background: rgba(104, 169, 255, 0.15);
     color: var(--accent-light);
 }
 .badge-cue {
@@ -1889,7 +1949,7 @@ body.ambient-muted #particleCanvas {
 .drag-over-zone {
     outline: 2px dashed var(--accent) !important;
     outline-offset: -4px;
-    background: rgba(199, 155, 82, 0.06) !important;
+    background: rgba(104, 169, 255, 0.08) !important;
 }
 
 /* --- 音频编辑器模态框 --- */
