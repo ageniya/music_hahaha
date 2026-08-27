@@ -67,8 +67,9 @@ body::before {
     display: block;
     background:
         repeating-linear-gradient(115deg, rgba(220, 235, 255, 0.014) 0 1px, transparent 1px 10px),
+        linear-gradient(105deg, transparent 0 14%, rgba(45, 211, 255, 0.035) 14% 14.12%, transparent 14.12% 33%, rgba(255, 86, 100, 0.03) 33% 33.12%, transparent 33.12% 61%, rgba(255, 213, 76, 0.028) 61% 61.12%, transparent 61.12% 100%),
         linear-gradient(90deg, transparent 0 7.4%, rgba(121, 191, 255, 0.12) 7.4% 7.46%, transparent 7.46% 100%);
-    opacity: 0.6;
+    opacity: 0.78;
     pointer-events: none;
     z-index: 0;
 }
@@ -117,7 +118,7 @@ body::after {
     left: 40px;
     width: 116px;
     height: 1px;
-    background: #86c5ff;
+    background: linear-gradient(90deg, #2bd3ff 0 24%, #5de27d 24% 45%, #ffd54c 45% 64%, #ff8e3f 64% 82%, #f469d5 82% 100%);
 }
 
 .header-left {
@@ -454,7 +455,7 @@ body.ambient-muted .atelier-wave i {
     position: absolute;
     top: -1px; left: 24px; right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(113, 191, 255, 0.72), transparent);
+    background: linear-gradient(90deg, transparent 0 8%, #2bd3ff 8% 22%, #5de27d 22% 38%, #ffd54c 38% 53%, #ff8e3f 53% 68%, #ff5664 68% 82%, #ae76ff 82% 92%, transparent 92% 100%);
     z-index: 2;
     pointer-events: none;
 }

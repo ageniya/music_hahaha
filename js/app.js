@@ -527,12 +527,19 @@ const ParticleBg = {
         this._onResize = () => this._resize();
         window.addEventListener('resize', this._onResize);
 
-        // 冷白、电蓝、紫与少量暖金分层；可由顶部开关随时关闭。
+        // 演唱会现场色谱：让亮点有明显的蓝、青、绿、黄、橙、红、粉紫层次。
         this._particles = [];
         const count = window.innerWidth < 768 ? 16 : 36;
         const colors = [
-            '235, 247, 255', '114, 192, 255', '196, 126, 255',
-            '91, 232, 214', '246, 207, 125',
+            '255, 248, 225', // 暖白
+            '45, 211, 255',  // 青
+            '76, 156, 255',  // 电蓝
+            '93, 226, 125',  // 绿
+            '255, 213, 76',  // 黄
+            '255, 142, 63',  // 橙
+            '255, 86, 100',  // 红
+            '244, 105, 213', // 粉
+            '174, 118, 255', // 紫
         ];
         for (let i = 0; i < count; i++) {
             const isLarge = Math.random() < 0.16;
