@@ -5,25 +5,25 @@
 
 /* --- CSS 变量 --- */
 :root {
-    --bg-primary: #080b16;
-    --bg-secondary: #101629;
-    --bg-tertiary: #0b1122;
-    --bg-card: #141e37;
-    --bg-card-hover: #1d2b4c;
-    --bg-input: #0c1428;
-    --text-primary: #f6f0e6;
-    --text-secondary: #c2cce0;
-    --text-muted: #7988a4;
-    --accent: #68a9ff;
-    --accent-light: #c2ddff;
-    --accent-dark: #326fc1;
-    --accent-glow: rgba(104, 169, 255, 0.2);
+    --bg-primary: #15110d;
+    --bg-secondary: #211912;
+    --bg-tertiary: #1a140f;
+    --bg-card: #2a2017;
+    --bg-card-hover: #392b1d;
+    --bg-input: #18120d;
+    --text-primary: #fff6e5;
+    --text-secondary: #ddc9a6;
+    --text-muted: #a69172;
+    --accent: #d9aa62;
+    --accent-light: #ffe4ad;
+    --accent-dark: #a77836;
+    --accent-glow: rgba(217, 170, 98, 0.2);
     --success: #34d399;
     --warning: #fbbf24;
     --danger: #f87171;
     --danger-hover: #ef4444;
-    --border: #2d4068;
-    --border-light: #46618f;
+    --border: #654d32;
+    --border-light: #957344;
     --radius-sm: 10px;
     --radius: 14px;
     --radius-lg: 18px;
@@ -50,7 +50,7 @@ html {
 
 body {
     font-family: var(--font);
-    background: #080b16;
+    background: #15110d;
     color: var(--text-primary);
     height: 100vh;
     height: 100dvh;
@@ -66,9 +66,9 @@ body::before {
     inset: 0;
     display: block;
     background:
-        repeating-linear-gradient(115deg, rgba(220, 235, 255, 0.014) 0 1px, transparent 1px 10px),
+        repeating-linear-gradient(115deg, rgba(255, 232, 195, 0.018) 0 1px, transparent 1px 10px),
         linear-gradient(105deg, transparent 0 14%, rgba(45, 211, 255, 0.035) 14% 14.12%, transparent 14.12% 33%, rgba(255, 86, 100, 0.03) 33% 33.12%, transparent 33.12% 61%, rgba(255, 213, 76, 0.028) 61% 61.12%, transparent 61.12% 100%),
-        linear-gradient(90deg, transparent 0 7.4%, rgba(121, 191, 255, 0.12) 7.4% 7.46%, transparent 7.46% 100%);
+        linear-gradient(90deg, transparent 0 7.4%, rgba(217, 170, 98, 0.16) 7.4% 7.46%, transparent 7.46% 100%);
     opacity: 0.78;
     pointer-events: none;
     z-index: 0;
@@ -78,7 +78,7 @@ body::after {
     content: '';
     position: fixed;
     inset: 14px;
-    border: 1px solid rgba(121, 191, 255, 0.14);
+    border: 1px solid rgba(217, 170, 98, 0.2);
     pointer-events: none;
     z-index: 0;
 }
@@ -104,8 +104,8 @@ body::after {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #101629;
-    border-bottom: 1px solid #304674;
+    background: #211912;
+    border-bottom: 1px solid #654d32;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -135,7 +135,7 @@ body::after {
 
 .subtitle {
     font-size: 0.83rem;
-    color: #9eabc7;
+    color: #bca884;
     font-weight: 400;
     letter-spacing: 0.03em;
     padding-left: 16px;
@@ -156,9 +156,9 @@ body::after {
     gap: 28px;
     margin: 10px 10px 0;
     padding: 13px 22px;
-    background: #101629;
-    border: 1px solid #2d4068;
-    border-bottom-color: #466fa3;
+    background: #211912;
+    border: 1px solid #654d32;
+    border-bottom-color: #957344;
     border-radius: 10px 10px 0 0;
 }
 
@@ -286,7 +286,7 @@ body.ambient-muted .atelier-wave i {
 
 .atelier-action {
     padding: 8px 12px;
-    border: 1px solid #3a5586;
+    border: 1px solid #745a38;
     border-radius: 6px;
     background: transparent;
     color: var(--text-secondary);
@@ -298,7 +298,7 @@ body.ambient-muted .atelier-wave i {
 
 .atelier-action:hover {
     border-color: var(--accent);
-    background: #1a2b4c;
+    background: #392b1d;
     color: var(--accent-light);
     transform: translateY(-1px);
 }
@@ -313,7 +313,7 @@ body.ambient-muted .atelier-wave i {
 }
 
 @keyframes focusFlash {
-    0%, 100% { border-color: #38517e; }
+    0%, 100% { border-color: #745a38; }
     35% { border-color: var(--accent-light); }
 }
 
@@ -351,12 +351,12 @@ body.ambient-muted .atelier-wave i {
 }
 
 .btn-outline {
-    background: #141e37;
+    background: #2a2017;
     color: #d4c4ab;
-    border: 1px solid #3a527f;
+    border: 1px solid #745a38;
 }
 .btn-outline:hover {
-    background: #1d2b4c;
+    background: #392b1d;
     color: var(--accent-light);
     border-color: var(--accent);
 }
@@ -434,8 +434,8 @@ body.ambient-muted .atelier-wave i {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    background: rgba(20, 30, 55, 0.91);
-    border: 1px solid #38517e;
+    background: rgba(42, 32, 23, 0.93);
+    border: 1px solid #745a38;
     border-radius: 12px;
     margin: 10px;
     box-shadow: 0 12px 26px rgba(20, 13, 8, 0.22);
@@ -445,7 +445,7 @@ body.ambient-muted .atelier-wave i {
 
 .panel:hover {
     transform: translateY(-2px);
-    border-color: #77b5ff;
+    border-color: #e4bd78;
     box-shadow: 0 16px 30px rgba(1, 6, 20, 0.4);
 }
 
@@ -586,10 +586,10 @@ body.ambient-muted #particleCanvas {
 .song-count {
     font-size: 0.78rem;
     color: var(--text-muted);
-    background: #10182b;
+    background: #211912;
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid #3b5682;
+    border: 1px solid #745a38;
 }
 
 .playlist-actions {
@@ -618,7 +618,7 @@ body.ambient-muted #particleCanvas {
 }
 .search-box input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(104, 169, 255, 0.2);
+    box-shadow: 0 0 0 2px rgba(217, 170, 98, 0.22);
 }
 .search-box input::placeholder {
     color: var(--text-muted);
@@ -1639,8 +1639,8 @@ body.ambient-muted #particleCanvas {
     .mobile-tabs {
         display: flex;
         flex-shrink: 0;
-        background: #101629;
-        border-top: 1px solid #304674;
+        background: #211912;
+        border-top: 1px solid #654d32;
         padding-bottom: env(safe-area-inset-bottom);
         z-index: 90;
     }
@@ -1666,7 +1666,7 @@ body.ambient-muted #particleCanvas {
     .mobile-tab.active {
         color: var(--accent-light);
         border-top-color: var(--accent);
-        background: rgba(104, 169, 255, 0.1);
+        background: rgba(217, 170, 98, 0.12);
     }
     .mobile-tab-icon {
         font-size: 1.3rem;
