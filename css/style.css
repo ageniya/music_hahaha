@@ -150,7 +150,7 @@ body::after {
 /* 编排控制台：让页头、曲库和工作区形成清晰的信息层级 */
 .atelier-strip {
     display: grid;
-    grid-template-columns: minmax(210px, 0.8fr) minmax(300px, 1.5fr) auto;
+    grid-template-columns: minmax(300px, 1fr) auto;
     align-items: center;
     gap: 28px;
     margin: 10px 10px 0;
