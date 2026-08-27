@@ -147,6 +147,115 @@ body::after {
     align-items: center;
 }
 
+/* 编排控制台：让页头、曲库和工作区形成清晰的信息层级 */
+.atelier-strip {
+    display: grid;
+    grid-template-columns: minmax(210px, 0.8fr) minmax(300px, 1.5fr) auto;
+    align-items: center;
+    gap: 28px;
+    margin: 10px 10px 0;
+    padding: 13px 22px;
+    background: #1d1b18;
+    border: 1px solid #564e42;
+    border-bottom-color: #6d5a43;
+    border-radius: 10px 10px 0 0;
+}
+
+.atelier-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.atelier-kicker {
+    color: var(--accent-light);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+}
+
+.atelier-intro strong {
+    color: var(--text-primary);
+    font-family: var(--display-font);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+.atelier-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+}
+
+.atelier-stat {
+    min-width: 112px;
+    padding: 0 22px;
+    border-left: 1px solid #4d4439;
+}
+
+.atelier-stat:first-child { border-left: 0; }
+.atelier-stat span {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+}
+
+.atelier-stat strong {
+    color: var(--accent-light);
+    font-family: var(--display-font);
+    font-size: 1.15rem;
+    font-weight: 500;
+}
+
+.atelier-stat em {
+    margin-left: 4px;
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    font-style: normal;
+}
+
+.atelier-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.atelier-action {
+    padding: 8px 12px;
+    border: 1px solid #5c5041;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font: 500 0.72rem var(--font);
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.atelier-action:hover {
+    border-color: var(--accent);
+    background: #2a251e;
+    color: var(--accent-light);
+    transform: translateY(-1px);
+}
+
+.atelier-action-primary {
+    border-color: var(--accent);
+    color: var(--accent-light);
+}
+
+.panel.focus-flash {
+    animation: focusFlash 0.8s ease-out;
+}
+
+@keyframes focusFlash {
+    0%, 100% { border-color: #5a5144; }
+    35% { border-color: var(--accent-light); }
+}
+
 /* --- 按钮 --- */
 .btn {
     padding: 10px 20px;
@@ -1428,6 +1537,9 @@ body.ambient-muted #particleCanvas {
 
 /* --- 响应式 --- */
 @media (max-width: 768px) {
+    .atelier-strip {
+        display: none;
+    }
     body {
         overflow: hidden;
         height: 100vh;

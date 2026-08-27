@@ -676,6 +676,7 @@ const App = {
     // 当前编辑上下文（workspace 中的哪个 item）
     _editingWsItem: null,
     _isLoading: false,
+    _foldersCollapsed: false,
 
     player: {
         audio: null,
@@ -785,6 +786,8 @@ const App = {
         document.getElementById('btnExportZip').addEventListener('click', () => this._exportZip());
         document.getElementById('btnRandomSong').addEventListener('click', () => this._playRandomSong());
         document.getElementById('btnAmbient').addEventListener('click', () => this._toggleAmbient());
+        document.getElementById('btnToggleFolders').addEventListener('click', () => this._toggleFolders());
+        document.getElementById('btnFocusWorkspace').addEventListener('click', () => this._focusWorkspace());
         // 导出信息
         document.getElementById('btnExportPlaylist').addEventListener('click', () => this._exportWorkspaceInfo());
 
@@ -833,6 +836,7 @@ const App = {
         const allSongs = MusicData.getAllSongs();
         const container = document.getElementById('libraryList');
         document.getElementById('libraryCount').textContent = `${MusicData.count} 首`;
+        this._updateAtelierStats();
 
         if (this._isLoading) {
             container.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><p>正在加载音乐库...</p></div>`;
@@ -983,6 +987,7 @@ const App = {
         const items = Workspace.getAll();
         document.getElementById('playlistCount').textContent = `${items.length} 首`;
         document.getElementById('playlistTotalDuration').textContent = MusicData._formatDuration(Workspace.getTotalDuration());
+        this._updateAtelierStats();
 
         // 更新移动端工作区 Tab 徽章
         const wsBadge = document.getElementById('mobileWsBadge');
@@ -1418,6 +1423,34 @@ const App = {
         button.classList.toggle('is-active', !muted);
         button.setAttribute('aria-pressed', String(!muted));
         this._toast(muted ? '背景亮点已隐藏' : '背景亮点已开启');
+    },
+
+    _updateAtelierStats() {
+        const libraryStat = document.getElementById('atelierLibraryStat');
+        const workspaceStat = document.getElementById('atelierWorkspaceStat');
+        const durationStat = document.getElementById('atelierDurationStat');
+        if (libraryStat) libraryStat.textContent = MusicData.count;
+        if (workspaceStat) workspaceStat.textContent = Workspace.count;
+        if (durationStat) durationStat.textContent = MusicData._formatDuration(Workspace.getTotalDuration());
+    },
+
+    _toggleFolders() {
+        this._foldersCollapsed = !this._foldersCollapsed;
+        document.querySelectorAll('#libraryList .folder-group, #libraryList .folder-sub')
+            .forEach(group => group.classList.toggle('open', !this._foldersCollapsed));
+        const button = document.getElementById('btnToggleFolders');
+        button.textContent = this._foldersCollapsed ? '展开曲库' : '折叠曲库';
+    },
+
+    _focusWorkspace() {
+        const panel = document.getElementById('panelPlaylist');
+        const mobileTab = document.querySelector('.mobile-tab[data-panel="panelPlaylist"]');
+        if (this._isTouch() && mobileTab) mobileTab.click();
+        if (panel) {
+            panel.classList.remove('focus-flash');
+            void panel.offsetWidth;
+            panel.classList.add('focus-flash');
+        }
     },
 
     _playWorkspaceSong(wsId) {

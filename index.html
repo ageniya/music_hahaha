@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
-    <link rel="stylesheet" href="css/style.css?v=20260825b">
+    <link rel="stylesheet" href="css/style.css?v=20260827a">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -34,6 +34,31 @@
         <!-- 隐藏的文件上传 input -->
         <input type="file" id="fileUploadMp3" accept=".mp3" multiple style="display:none">
     </header>
+
+    <section class="atelier-strip" aria-label="婚礼音乐编排控制台">
+        <div class="atelier-intro">
+            <span class="atelier-kicker">TING MUSIC ATELIER</span>
+            <strong>婚礼音乐编排室</strong>
+        </div>
+        <div class="atelier-stats">
+            <div class="atelier-stat">
+                <span>曲库收藏</span>
+                <strong id="atelierLibraryStat">0</strong><em>首</em>
+            </div>
+            <div class="atelier-stat">
+                <span>正在编排</span>
+                <strong id="atelierWorkspaceStat">0</strong><em>首</em>
+            </div>
+            <div class="atelier-stat atelier-duration">
+                <span>仪式时长</span>
+                <strong id="atelierDurationStat">0:00</strong>
+            </div>
+        </div>
+        <div class="atelier-actions">
+            <button class="atelier-action" id="btnToggleFolders" type="button">折叠曲库</button>
+            <button class="atelier-action atelier-action-primary" id="btnFocusWorkspace" type="button">进入工作区 →</button>
+        </div>
+    </section>
 
     <!-- 主体布局 -->
     <div class="main-container">
@@ -212,7 +237,7 @@
         </div>
     </div>
     <script src="js/data.js?v=2"></script>
-    <script src="js/app.js?v=8"></script>
+    <script src="js/app.js?v=9"></script>
     <script src="js/web-pet-portrait.js?v=7"></script>
 
     <!-- 预设音乐库数据（内嵌，无需服务器） -->
