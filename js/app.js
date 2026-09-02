@@ -527,19 +527,19 @@ const ParticleBg = {
         this._onResize = () => this._resize();
         window.addEventListener('resize', this._onResize);
 
-        // 演唱会现场色谱：让亮点有明显的蓝、青、绿、黄、橙、红、粉紫层次。
+        // 翡翠、玉石、香槟金与少量珊瑚色组成的现场亮点色谱。
         this._particles = [];
         const count = window.innerWidth < 768 ? 16 : 36;
         const colors = [
-            '255, 248, 225', // 暖白
-            '45, 211, 255',  // 青
-            '76, 156, 255',  // 电蓝
-            '93, 226, 125',  // 绿
-            '255, 213, 76',  // 黄
-            '255, 142, 63',  // 橙
-            '255, 86, 100',  // 红
-            '244, 105, 213', // 粉
-            '174, 118, 255', // 紫
+            '255, 248, 225', // 奶油白
+            '190, 225, 201', // 浅玉石
+            '111, 207, 165', // 薄荷绿
+            '47, 164, 126',  // 翡翠绿
+            '234, 196, 108', // 香槟金
+            '255, 218, 126', // 金黄
+            '240, 133, 101', // 珊瑚橙
+            '224, 105, 131', // 玫瑰红
+            '157, 190, 255', // 少量冷色平衡
         ];
         for (let i = 0; i < count; i++) {
             const isLarge = Math.random() < 0.16;
@@ -882,6 +882,8 @@ const App = {
                     tree[parent].songs.push(song);
                 }
             }
+            // 预留一个空的 D&L 文件夹，方便后续继续添加歌曲。
+            tree['D&L'] = { subs: {}, songs: [] };
         }
 
         if (Object.keys(tree).length === 0) {
@@ -1599,7 +1601,9 @@ const App = {
             if (parts[0]) set.add(parts[0]);
             if (parts.length > 2 && parts[1]) set.add(parts[0] + '/' + parts[1]);
         }
-        return [...set].sort();
+        // D&L 没有歌曲时也要出现在上传目标列表，并固定放在最后。
+        set.add('D&L');
+        return [...set].filter(folder => folder !== 'D&L').sort().concat('D&L');
     },
 
     // ==================== 工具 ====================
