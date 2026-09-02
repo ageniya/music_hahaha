@@ -4,12 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TING · 婚礼音乐库</title>
-    <link rel="stylesheet" href="css/style.css?v=20260902b">
+    <link rel="stylesheet" href="css/style.css?v=20260902d">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- 浮动音符（JS 动态生成） -->
     <div class="floating-notes"></div>
+
+    <!-- 背景流动线条：只做装饰，不参与页面交互 -->
+    <svg class="ambient-ribbons" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ambient-ribbon ribbon-top" d="M-80 118 C170 -18 325 226 575 108 S1040 -25 1525 154"></path>
+        <path class="ambient-ribbon ribbon-top ribbon-top-thin" d="M-90 143 C165 18 315 248 590 130 S1055 15 1535 181"></path>
+        <path class="ambient-ribbon ribbon-bottom" d="M-90 790 C190 935 420 648 710 790 S1190 982 1535 688"></path>
+        <path class="ambient-ribbon ribbon-bottom ribbon-bottom-thin" d="M-80 817 C190 956 438 685 722 817 S1210 1002 1528 718"></path>
+        <path class="ambient-ribbon ribbon-side" d="M1485 194 C1265 310 1320 510 1515 626"></path>
+    </svg>
 
     <!-- 顶部导航 -->
     <header class="header">
